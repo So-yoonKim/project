@@ -20,7 +20,7 @@ export default function RootLayout() {
   const closeNav = () => setNavOpen(false)
 
   useEffect(() => { loadCart() }, [loadCart]) // 앱을 열 때 Supabase 에서 내 나들이 불러오기
-  useEffect(() => { document.documentElement.lang = lang; document.title = t('brand') }, [lang, t])
+  useEffect(() => { document.documentElement.lang = lang }, [lang]) // 탭 제목은 언어와 상관없이 index.html 의 "할망슈퍼" 그대로
 
   return (
     <div className="d-flex flex-column min-vh-100">
