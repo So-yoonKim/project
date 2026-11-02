@@ -372,3 +372,6 @@ body {
 }
 .nav-drawer-links a.active { background: var(--mustard); }
 .tag-orig { font-size: .78rem; font-weight: 500; color: var(--rust-dark); opacity: .75; }
+
+/* 장바구니 서랍 아래의 "할망의 당부" 포스트잇 (첫 화면 포스트잇과 같은 모양, 서랍 안에서는 제자리에) */
+.postit.cart-postit { position: relative; top: auto; left: auto; width: 100%; margin: 1.6rem 0 .4rem; padding: 1.4rem 1.1rem 1rem; font-size: .95rem; transform: rotate(-1deg); }

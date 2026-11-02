@@ -86,6 +86,14 @@ export default function CartDrawer() {
               <Button className="cart-btn" size="sm" onClick={showMap}><i className="bi bi-map me-1" />{t('cart.viewMap')}</Button>
               <Button variant="outline-dark" size="sm" onClick={clear}>{t('cart.clear')}</Button>
             </div>
+            {/* 할망의 당부: 코스를 한 곳 이상 담았을 때만, 선택한 언어 한 가지로만 보인다 */}
+            <aside className="postit cart-postit">
+              <span className="postit-pin" />
+              <h3 className="postit-title">{t('cart.note.title')}</h3>
+              <p>{t('cart.note.l1')}</p>
+              <p>{t('cart.note.l2')}</p>
+              <p className="mb-0">{t('cart.note.l3')}</p>
+            </aside>
           </>
         )}
       </Offcanvas.Body>
