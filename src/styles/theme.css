@@ -311,3 +311,12 @@ body {
 .m3d-home { flex: none; background: var(--mustard); }
 @media (max-width: 575px) { .m3d-filters { max-width: 100%; top: 70px; right: 8px; } .m3d-card { top: 150px; } }
 .m3d .m3d-add.plus-btn { width: auto; height: auto; padding: .3rem .9rem; display: inline-flex; align-items: center; border-radius: 999px; font-size: .9rem; }
+.m3d-wx-now { display: block; margin-top: 2px; font-size: .8rem; font-weight: 700; color: var(--green); }
+.m3d-wx {
+  position: absolute; right: 12px; bottom: 84px; display: flex; align-items: center; gap: 6px; padding: 6px 10px;
+  background: rgba(243, 230, 196, .95); border: 3px solid var(--ink); border-radius: 999px; box-shadow: 3px 3px 0 var(--ink);
+}
+.m3d-wx span { font-size: .8rem; font-weight: 700; color: var(--rust-dark); margin-right: 2px; }
+.m3d-wx button { font-size: 14px; font-weight: 700; color: var(--ink); background: var(--cream); border: 2px solid var(--ink); border-radius: 999px; padding: 2px 10px; cursor: pointer; }
+.m3d-wx button.act { background: var(--red); color: var(--cream); }
+@media (max-width: 575px) { .m3d-wx { right: 8px; left: 8px; bottom: 82px; justify-content: center; flex-wrap: wrap; border-radius: 18px; } }

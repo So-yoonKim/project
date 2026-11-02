@@ -69,6 +69,7 @@ export const MESSAGES = {
     'm3d.button': '3D지도', 'm3d.title': '돌하르방 제주 지도', 'm3d.sub': '대표 관광지 {n}곳', 'm3d.home': '전체 보기',
     'm3d.close': '닫기', 'm3d.add': '내 나들이에 담기', 'm3d.inCart': '담았어요', 'm3d.noWebgl': '이 기기에서는 3D 지도를 쓸 수 없어요.',
     'm3d.type.mt': '오름·산', 'm3d.type.sea': '바다·해안', 'm3d.type.forest': '숲·폭포·동굴', 'm3d.type.culture': '문화·체험',
+    'm3d.wx.now': '지금 {place}', 'm3d.wx.preview': '날씨 미리보기', 'm3d.wx.real': '실제',
 
     'footer': '설문대할망이 담아주는 제주나들이 · 데이터 출처: 제주관광공사 VISIT JEJU · 제주특별자치도 · 기상청 · 국가유산청',
     'notfound.title': '여긴 가게가 아니우다',
@@ -140,6 +141,7 @@ export const MESSAGES = {
     'm3d.button': '3D Map', 'm3d.title': 'Dol Hareubang Jeju Map', 'm3d.sub': '{n} top attractions', 'm3d.home': 'View all',
     'm3d.close': 'Close', 'm3d.add': 'Add to my outing', 'm3d.inCart': 'Added', 'm3d.noWebgl': '3D map is not available on this device.',
     'm3d.type.mt': 'Oreum & Mountains', 'm3d.type.sea': 'Sea & Coast', 'm3d.type.forest': 'Forest, Falls & Caves', 'm3d.type.culture': 'Culture & Activities',
+    'm3d.wx.now': 'Now in {place}', 'm3d.wx.preview': 'Weather preview', 'm3d.wx.real': 'Live',
 
     'footer': 'Jeju Outings, Packed by Grandma Seolmundae · Data: Jeju Tourism Organization (VISIT JEJU) · Jeju Special Self-Governing Province · KMA · Korea Heritage Service',
     'notfound.title': 'This is not a shop',
@@ -211,6 +213,7 @@ export const MESSAGES = {
     'm3d.button': '3D地图', 'm3d.title': '石头爷爷济州地图', 'm3d.sub': '代表景点 {n} 处', 'm3d.home': '查看全部',
     'm3d.close': '关闭', 'm3d.add': '加入我的出游', 'm3d.inCart': '已加入', 'm3d.noWebgl': '此设备无法使用 3D 地图。',
     'm3d.type.mt': '오름·山', 'm3d.type.sea': '大海·海岸', 'm3d.type.forest': '森林·瀑布·洞窟', 'm3d.type.culture': '文化·体验',
+    'm3d.wx.now': '现在{place}', 'm3d.wx.preview': '天气预览', 'm3d.wx.real': '实时',
 
     'footer': '设文大婆婆为你装满的济州出游 · 数据来源：济州观光公社 VISIT JEJU · 济州特别自治道 · 气象厅 · 国家遗产厅',
     'notfound.title': '这里不是商店',
@@ -282,6 +285,7 @@ export const MESSAGES = {
     'm3d.button': '3Dマップ', 'm3d.title': 'トルハルバン済州マップ', 'm3d.sub': '代表的な観光地 {n}か所', 'm3d.home': '全体を見る',
     'm3d.close': '閉じる', 'm3d.add': 'マイおでかけに入れる', 'm3d.inCart': '入れました', 'm3d.noWebgl': 'この端末では3Dマップを使えません。',
     'm3d.type.mt': 'オルム・山', 'm3d.type.sea': '海・海岸', 'm3d.type.forest': '森・滝・洞窟', 'm3d.type.culture': '文化・体験',
+    'm3d.wx.now': '今の{place}', 'm3d.wx.preview': '天気プレビュー', 'm3d.wx.real': '実際',
 
     'footer': 'ソルムンデハルマンが詰めてくれる済州おでかけ · データ提供：済州観光公社 VISIT JEJU · 済州特別自治道 · 気象庁 · 国家遺産庁',
     'notfound.title': 'ここはお店じゃないよ',
@@ -353,6 +357,7 @@ export const MESSAGES = {
     'm3d.button': '3D-карта', 'm3d.title': 'Карта Чеджу с толхарубанами', 'm3d.sub': 'Главные места: {n}', 'm3d.home': 'Показать все',
     'm3d.close': 'Закрыть', 'm3d.add': 'Добавить в мою прогулку', 'm3d.inCart': 'Добавлено', 'm3d.noWebgl': 'На этом устройстве 3D-карта недоступна.',
     'm3d.type.mt': 'Орымы и горы', 'm3d.type.sea': 'Море и побережье', 'm3d.type.forest': 'Лес, водопады, пещеры', 'm3d.type.culture': 'Культура и занятия',
+    'm3d.wx.now': 'Сейчас: {place}', 'm3d.wx.preview': 'Предпросмотр погоды', 'm3d.wx.real': 'Реальная',
 
     'footer': 'Прогулки по Чеджу от бабушки Сольмундэ · Данные: Туристическая организация Чеджу (VISIT JEJU) · Особая автономная провинция Чеджу · Метеослужба · Служба культурного наследия Кореи',
     'notfound.title': 'Здесь не магазин',

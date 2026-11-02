@@ -65,7 +65,8 @@ export function createJejuScene({ container, labelsEl, places, types, names, bac
   let fly = null
   controls.addEventListener('start', () => { controls.autoRotate = false; fly = null; controls.enabled = true })
 
-  scene.add(new THREE.HemisphereLight(0xfff6ea, 0xffc9a0, 0.95 * LIGHT))
+  const hemi = new THREE.HemisphereLight(0xfff6ea, 0xffc9a0, 0.95 * LIGHT)
+  scene.add(hemi)
   const sun = new THREE.DirectionalLight(0xffffff, 0.8 * LIGHT)
   sun.position.set(-9, 16, 10); sun.castShadow = true; sun.shadow.mapSize.set(2048, 2048)
   Object.assign(sun.shadow.camera, { left: -17, right: 17, top: 14, bottom: -14, near: 1, far: 60 }); sun.shadow.bias = -0.0006
@@ -139,12 +140,13 @@ export function createJejuScene({ container, labelsEl, places, types, names, bac
 
   /* ---------- 구름 ---------- */
   const clouds = new THREE.Group(); scene.add(clouds)
+  const cloudMat = new THREE.MeshLambertMaterial({ color: 0xffffff })
   {
-    const mat = new THREE.MeshLambertMaterial({ color: 0xffffff })
-    for (let i = 0; i < 5; i++) {
+    const mat = cloudMat
+    for (let i = 0; i < 12; i++) { // 12개를 만들어 두고, 날씨에 따라 앞에서부터 몇 개만 보인다
       const c = new THREE.Group()
       ;[[0, 0, 0, .7], [.7, -.1, .1, .55], [-.7, -.1, 0, .5], [.2, .2, -.1, .5]].forEach((s) => { const m = new THREE.Mesh(new THREE.IcosahedronGeometry(s[3], 1), mat); m.position.set(s[0], s[1], s[2]); m.castShadow = true; c.add(m) })
-      c.position.set(-14 + i * 7 + Math.random() * 2, 6.5 + Math.random() * 1.5, (Math.random() - .5) * 14)
+      c.position.set(-14 + ((i * 7) % 28) + Math.random() * 2, 6.5 + Math.random() * 1.5, (Math.random() - .5) * 14)
       c.scale.setScalar(.9 + Math.random() * .6); c.userData.v = .15 + Math.random() * .15; clouds.add(c)
     }
   }
@@ -199,6 +201,94 @@ export function createJejuScene({ container, labelsEl, places, types, names, bac
     ;[bt, bf, fr, pt, pf].forEach((m) => { m.castShadow = true; scene.add(m) })
   }
 
+  /* ---------- 날씨: 안개·구름·비·눈 ---------- */
+  // 값은 목표치이고, 화면에서는 바뀔 때마다 부드럽게 따라간다
+  const WEATHER = {
+    clear: { bg: background, near: 400, far: 800, sun: .8, hemi: .95, cloud: 0xffffff, clouds: 5, rain: 0, snow: 0 },
+    cloudy: { bg: '#ecd5bf', near: 30, far: 90, sun: .65, hemi: .95, cloud: 0xf1ece6, clouds: 8, rain: 0, snow: 0 },
+    overcast: { bg: '#bdb6b0', near: 12, far: 50, sun: .4, hemi: .9, cloud: 0xb4b0ad, clouds: 12, rain: 0, snow: 0 },
+    rain: { bg: '#9aa3ab', near: 10, far: 42, sun: .32, hemi: .85, cloud: 0x8f969c, clouds: 12, rain: 1, snow: 0 },
+    snow: { bg: '#dfe6ec', near: 12, far: 48, sun: .55, hemi: 1, cloud: 0xe4e8ec, clouds: 12, rain: 0, snow: 1 },
+  }
+  const wx = { bg: new THREE.Color(background), near: 400, far: 800, sun: .8, hemi: .95, cloud: new THREE.Color(0xffffff), rain: 0, snow: 0 }
+  let wxTarget = WEATHER.clear
+  const wxCol = new THREE.Color()
+  scene.fog = new THREE.Fog(wx.bg, wx.near, wx.far)
+
+  // 빗방울: 짧은 선 1400개
+  const RAIN_N = 1400, rainXYZ = new Float32Array(RAIN_N * 3), rainPos = new Float32Array(RAIN_N * 6)
+  for (let i = 0; i < RAIN_N; i++) { rainXYZ[i * 3] = (Math.random() - .5) * 28; rainXYZ[i * 3 + 1] = Math.random() * 13; rainXYZ[i * 3 + 2] = (Math.random() - .5) * 22 }
+  const rainGeo = new THREE.BufferGeometry(); rainGeo.setAttribute('position', new THREE.BufferAttribute(rainPos, 3))
+  const rain = new THREE.LineSegments(rainGeo, new THREE.LineBasicMaterial({ color: 0xd6ecff, transparent: true, opacity: 0, fog: false }))
+  rain.frustumCulled = false; rain.visible = false; scene.add(rain)
+  // 눈송이: 점 900개
+  const SNOW_N = 900, snowPos = new Float32Array(SNOW_N * 3)
+  for (let i = 0; i < SNOW_N; i++) { snowPos[i * 3] = (Math.random() - .5) * 28; snowPos[i * 3 + 1] = Math.random() * 13; snowPos[i * 3 + 2] = (Math.random() - .5) * 22 }
+  const snowGeo = new THREE.BufferGeometry(); snowGeo.setAttribute('position', new THREE.BufferAttribute(snowPos, 3))
+  const snow = new THREE.Points(snowGeo, new THREE.PointsMaterial({ color: 0xffffff, size: .16, transparent: true, opacity: 0, depthWrite: false, fog: false }))
+  snow.frustumCulled = false; snow.visible = false; scene.add(snow)
+  // 바다에 퍼지는 물결 고리
+  const ripples = Array.from({ length: 18 }, () => {
+    const g = new THREE.RingGeometry(0.06, 0.1, 24); g.rotateX(-Math.PI / 2)
+    const m = new THREE.Mesh(g, new THREE.MeshBasicMaterial({ color: 0xffffff, transparent: true, opacity: 0, depthWrite: false, fog: false }))
+    m.visible = false; m.position.y = 0.07; scene.add(m)
+    return { m, age: Math.random() * 1.4 }
+  })
+  function placeRipple(r) {
+    for (let k = 0; k < 20; k++) {
+      const x = (Math.random() - .5) * 26, z = (Math.random() - .5) * 20
+      if (!inside(x, z) && edgeDist(x, z) > 0.25) { r.m.position.x = x; r.m.position.z = z; return }
+    }
+  }
+  ripples.forEach(placeRipple)
+  setWeather('clear')
+
+  function setWeather(mode) {
+    wxTarget = WEATHER[mode] ?? WEATHER.clear
+    clouds.children.forEach((c, i) => { c.visible = i < wxTarget.clouds })
+  }
+  function updateWeather(dt) {
+    const k = Math.min(1, dt * 2.2), slow = RM ? 0.25 : 1
+    wx.bg.lerp(wxCol.set(wxTarget.bg), k); scene.background.copy(wx.bg); scene.fog.color.copy(wx.bg)
+    wx.near += (wxTarget.near - wx.near) * k; wx.far += (wxTarget.far - wx.far) * k
+    scene.fog.near = wx.near; scene.fog.far = wx.far
+    wx.sun += (wxTarget.sun - wx.sun) * k; wx.hemi += (wxTarget.hemi - wx.hemi) * k
+    sun.intensity = wx.sun * LIGHT; hemi.intensity = wx.hemi * LIGHT
+    wx.cloud.lerp(wxCol.set(wxTarget.cloud), k); cloudMat.color.copy(wx.cloud)
+    wx.rain += (wxTarget.rain - wx.rain) * k; wx.snow += (wxTarget.snow - wx.snow) * k
+
+    rain.visible = wx.rain > 0.01
+    if (rain.visible) {
+      rain.material.opacity = 0.55 * wx.rain
+      for (let i = 0; i < RAIN_N; i++) {
+        let y = rainXYZ[i * 3 + 1] - 15 * dt * slow, x = rainXYZ[i * 3] + 1.2 * dt * slow
+        if (y < 0) { y = 13; x = (Math.random() - .5) * 28 }
+        rainXYZ[i * 3] = x; rainXYZ[i * 3 + 1] = y
+        const z = rainXYZ[i * 3 + 2]
+        rainPos[i * 6] = x; rainPos[i * 6 + 1] = y; rainPos[i * 6 + 2] = z
+        rainPos[i * 6 + 3] = x + 0.05; rainPos[i * 6 + 4] = y + 0.4; rainPos[i * 6 + 5] = z
+      }
+      rainGeo.attributes.position.needsUpdate = true
+    }
+    snow.visible = wx.snow > 0.01
+    if (snow.visible) {
+      snow.material.opacity = 0.9 * wx.snow
+      for (let i = 0; i < SNOW_N; i++) {
+        let y = snowPos[i * 3 + 1] - 1.1 * dt * slow
+        if (y < 0) y = 13
+        snowPos[i * 3] += Math.sin(T * 0.8 + i) * 0.35 * dt * slow; snowPos[i * 3 + 1] = y
+      }
+      snowGeo.attributes.position.needsUpdate = true
+    }
+    ripples.forEach((r) => {
+      r.m.visible = wx.rain > 0.01
+      if (!r.m.visible) return
+      r.age += dt * slow
+      if (r.age > 1.4) { r.age = 0; placeRipple(r) }
+      r.m.scale.setScalar(1 + (r.age / 1.4) * 14); r.m.material.opacity = (1 - r.age / 1.4) * 0.6 * wx.rain
+    })
+  }
+
   /* ---------- 이름표·선택·카메라 이동 ---------- */
   const typeOn = Object.fromEntries(Object.keys(types).map((k) => [k, true]))
   let selected = null, hovered = null
@@ -242,7 +332,7 @@ export function createJejuScene({ container, labelsEl, places, types, names, bac
   const tmp = new THREE.Vector3(); let T = 0
   const RM = !!(window.matchMedia && matchMedia('(prefers-reduced-motion: reduce)').matches)
   function update(dt) {
-    T += dt * (RM ? 0.25 : 1); waveUpdate(T)
+    T += dt * (RM ? 0.25 : 1); waveUpdate(T); updateWeather(dt)
     clouds.children.forEach((c) => { c.position.x += c.userData.v * dt; if (c.position.x > 17) c.position.x = -17 })
     pins.forEach((p) => {
       const vis = typeOn[p.type]; p.g.visible = vis
@@ -294,5 +384,5 @@ export function createJejuScene({ container, labelsEl, places, types, names, bac
     pins.forEach((p) => p.lbl.remove())
   }
 
-  return { select, clearSelection, home, setTypeOn, setNames, dispose }
+  return { select, clearSelection, home, setTypeOn, setNames, setWeather, dispose }
 }

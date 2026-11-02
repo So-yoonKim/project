@@ -4,6 +4,24 @@ import { useAppStore } from '../store/useAppStore'
 import { useT } from '../i18n/useT'
 import { PLACES, TEXT, TYPES } from '../data/places3d'
 import { createJejuScene } from '../three/jejuScene'
+import { fetchWeather } from '../api/client'
+
+// 기상청 예보 한 칸 → 3D 장면의 날씨 (비·눈 > 흐림 > 구름많음 > 맑음)
+function weatherMode(slot) {
+  if (!slot) return 'clear'
+  if (slot.rain === '눈') return 'snow'
+  if (slot.rain !== '없음') return 'rain' // 비, 소나기, 비/눈
+  if (slot.sky === '흐림') return 'overcast'
+  if (slot.sky === '구름많음') return 'cloudy'
+  return 'clear'
+}
+const PREVIEW = [
+  { mode: 'clear', label: 'sky.맑음', icon: 'sun-fill' },
+  { mode: 'cloudy', label: 'sky.구름많음', icon: 'cloud-sun-fill' },
+  { mode: 'overcast', label: 'sky.흐림', icon: 'clouds-fill' },
+  { mode: 'rain', label: 'rain.비', icon: 'cloud-rain-fill' },
+  { mode: 'snow', label: 'rain.눈', icon: 'cloud-snow-fill' },
+]
 
 // 3D 제주 지도: 돌하르방 30곳. 핀을 누르면 카메라가 날아가 설명 카드가 열리고, + 로 장바구니에 담는다.
 export default function Map3D() {
@@ -22,6 +40,17 @@ export default function Map3D() {
   const [selected, setSelected] = useState(null) // 선택한 핀 번호
   const [typeOn, setTypeOn] = useState({ mt: true, sea: true, forest: true, culture: true })
   const [failed, setFailed] = useState(false)
+  const [real, setReal] = useState(null)       // 제주시 지금 시간대 예보
+  const [preview, setPreview] = useState(null) // 미리보기로 고른 날씨 (null = 실제 날씨를 따라감)
+
+  // 실제 날씨: 화면에 들어올 때 한 번 가져온다 (실패하면 맑음)
+  useEffect(() => {
+    let alive = true
+    fetchWeather('제주시').then((slots) => { if (alive) setReal(slots[0] ?? null) }).catch(() => {})
+    return () => { alive = false }
+  }, [])
+  const mode = preview ?? weatherMode(real)
+  useEffect(() => { sceneRef.current?.setWeather(mode) }, [mode])
 
   // 장면은 이 화면에 있는 동안만 만들고, 떠날 때 정리한다
   useEffect(() => {
@@ -75,7 +104,15 @@ export default function Map3D() {
       <div ref={labelsRef} className="m3d-labels" />
       {failed && <div className="m3d-fail">{t('m3d.noWebgl')}</div>}
 
-      <div className="m3d-title"><b>🗿 {t('m3d.title')}</b><span>{t('m3d.sub', { n: PLACES.length })}</span></div>
+      <div className="m3d-title">
+        <b>🗿 {t('m3d.title')}</b>
+        <span>{t('m3d.sub', { n: PLACES.length })}</span>
+        {real && (
+          <span className="m3d-wx-now">
+            {t('m3d.wx.now', { place: t('weather.제주시') })} · {real.rain !== '없음' ? t(`rain.${real.rain}`) : t(`sky.${real.sky}`)} · {real.temp}℃
+          </span>
+        )}
+      </div>
       <div className="m3d-filters">
         {Object.keys(TYPES).map((k) => (
           <button key={k} type="button" className={`m3d-chip ${typeOn[k] ? 'act' : ''}`} onClick={() => toggleType(k)}>
@@ -97,6 +134,16 @@ export default function Map3D() {
           </Button>
         </div>
       )}
+
+      <div className="m3d-wx">
+        <span>{t('m3d.wx.preview')}</span>
+        <button type="button" className={preview === null ? 'act' : ''} onClick={() => setPreview(null)}>{t('m3d.wx.real')}</button>
+        {PREVIEW.map((p) => (
+          <button key={p.mode} type="button" className={preview === p.mode ? 'act' : ''} aria-label={t(p.label)} title={t(p.label)} onClick={() => setPreview(p.mode)}>
+            <i className={`bi bi-${p.icon}`} />
+          </button>
+        ))}
+      </div>
 
       <div className="m3d-dock">
         <button type="button" className="m3d-home" onClick={home}>{t('m3d.home')}</button>
