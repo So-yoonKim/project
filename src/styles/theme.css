@@ -1,5 +1,6 @@
 /* 레트로 슈퍼마켓 테마 — 색감은 녹슨 벽 + 빛바랜 양철 간판 포스터 */
 :root {
+  --wall: #fbd5a3;
   --rust: #8f3b24;
   --rust-dark: #5e2314;
   --cream: #f3e6c4;
@@ -20,12 +21,12 @@ html { font-size: 18px; }
 body {
   font-family: var(--bs-body-font-family);
   color: var(--ink);
-  background-color: var(--rust);
-  /* 녹슨 벽 질감: 얼룩 + 미세한 점 */
+  background-color: var(--wall);
+  /* 할망슈퍼 복숭아빛 벽 질감: 은은한 얼룩 + 미세한 점 */
   background-image:
-    radial-gradient(circle at 15% 20%, rgba(255, 190, 120, .18), transparent 45%),
-    radial-gradient(circle at 85% 70%, rgba(40, 10, 0, .35), transparent 50%),
-    radial-gradient(rgba(0, 0, 0, .12) 1px, transparent 1.5px);
+    radial-gradient(circle at 15% 20%, rgba(255, 245, 220, .45), transparent 45%),
+    radial-gradient(circle at 85% 70%, rgba(200, 120, 60, .22), transparent 50%),
+    radial-gradient(rgba(143, 59, 36, .10) 1px, transparent 1.5px);
   background-size: auto, auto, 6px 6px;
   background-attachment: fixed;
 }
@@ -110,8 +111,7 @@ body {
 
 /* 첫 화면의 기획 의도 한 줄 */
 .hero-intent {
-  max-width: 560px; margin: 1.1rem auto 0; color: var(--cream); font-weight: 700; line-height: 1.5;
-  text-shadow: 0 2px 0 rgba(0, 0, 0, .55);
+  max-width: 560px; margin: 1.1rem auto 0; color: var(--rust-dark); font-weight: 700; line-height: 1.5;
 }
 
 /* ── 카테고리 포스터 카드 ─────────────────────────── */
