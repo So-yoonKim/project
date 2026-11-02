@@ -101,6 +101,11 @@ export default function Map3D() {
     if (selected !== null && PLACES[selected].type === k && !on) setSelected(null)
   }
 
+  const chips = Object.keys(TYPES).map((k) => (
+    <button key={k} type="button" className={`m3d-chip ${typeOn[k] ? 'act' : ''}`} onClick={() => toggleType(k)}>
+      <i className="m3d-dot" style={{ background: TYPES[k].css }} />{t(`m3d.type.${k}`)}
+    </button>
+  ))
   const sel = selected === null ? null : PLACES[selected]
   const key = `m3d:${selected}`
   const inCart = sel && cart.some((c) => c.key === key)
@@ -127,13 +132,7 @@ export default function Map3D() {
           </span>
         )}
       </div>
-      <div className="m3d-filters">
-        {Object.keys(TYPES).map((k) => (
-          <button key={k} type="button" className={`m3d-chip ${typeOn[k] ? 'act' : ''}`} onClick={() => toggleType(k)}>
-            <i className="m3d-dot" style={{ background: TYPES[k].css }} />{t(`m3d.type.${k}`)}
-          </button>
-        ))}
-      </div>
+      <div className="m3d-filters">{chips}</div>
       </div>
 
       <div className="m3d-bottom">
@@ -162,6 +161,8 @@ export default function Map3D() {
       </div>
 
       <div className="m3d-dock">
+        {/* 폰에서는 이 칸이 종류 칩으로 바뀌고 전체 보기·30곳 목록은 숨긴다 (CSS) */}
+        <div className="m3d-dock-filters">{chips}</div>
         <button type="button" className="m3d-home" onClick={home}>{t('m3d.home')}</button>
         <div ref={listRef} className="m3d-list">
           {PLACES.map((p, i) => typeOn[p.type] && (

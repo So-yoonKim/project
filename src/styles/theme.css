@@ -319,6 +319,8 @@ body {
 .m3d-wx button { font-size: 14px; font-weight: 700; color: var(--ink); background: var(--cream); border: 2px solid var(--ink); border-radius: 999px; padding: 2px 10px; cursor: pointer; }
 .m3d-wx button.act { background: var(--red); color: var(--cream); }
 
+/* 아래 상자 안의 종류 칩은 폰에서만 보인다 */
+.m3d-dock-filters { display: none; }
 /* 넓은 화면: 묶음 상자는 없는 셈 치고 각 요소를 제자리에 둔다 */
 .m3d-top, .m3d-bottom { display: contents; }
 /* 폰: 위·아래 묶음이 세로로 쌓여서 서로 겹치지 않는다 */
@@ -341,5 +343,7 @@ body {
   .m3d-wx span { display: none; }
   .m3d-wx button { padding: 1px 8px; font-size: 13px; }
   .m3d-dock { width: auto; padding: 5px 7px; border-width: 2px; box-shadow: 2px 2px 0 var(--ink); border-radius: 16px; }
-  .m3d-home, .m3d-list button { font-size: 12px; padding: 3px 10px; }
+  .m3d-top .m3d-filters { display: none; }
+  .m3d-dock .m3d-home, .m3d-dock .m3d-list { display: none; }
+  .m3d-dock-filters { display: flex; gap: 6px; flex: 1; overflow-x: auto; scrollbar-width: none; }
 }
