@@ -267,3 +267,47 @@ body {
 
 /* ── 푸터 ───────────────────────────────────────── */
 .shop-footer { background: var(--ink); color: var(--cream-dark); border-top: 6px solid var(--mustard); }
+
+/* ── 3D 제주 지도 ─────────────────────────────────── */
+.m3d { position: relative; height: calc(100svh - 76px); min-height: 520px; overflow: hidden; background: var(--wall); }
+.m3d-stage { position: absolute; inset: 0; }
+.m3d-stage canvas { display: block; width: 100%; height: 100%; touch-action: none; }
+.m3d-labels { position: absolute; inset: 0; pointer-events: none; overflow: hidden; }
+.m3d-lbl {
+  position: absolute; left: 0; top: 0; display: none; white-space: nowrap; font-size: 13px; font-weight: 700;
+  padding: 2px 9px; color: var(--ink); background: var(--cream); border: 2px solid var(--ink); border-radius: 999px;
+}
+.m3d-lbl.sel { background: var(--red); color: var(--cream); border-color: var(--cream); font-size: 15px; }
+.m3d-fail { position: absolute; inset: 0; display: grid; place-items: center; font-weight: 800; }
+.m3d-title, .m3d-card, .m3d-dock {
+  position: absolute; background: rgba(243, 230, 196, .95); border: 3px solid var(--ink); box-shadow: 3px 3px 0 var(--ink);
+}
+.m3d-title { left: 12px; top: 12px; padding: 6px 14px; border-radius: 14px; }
+.m3d-title b { display: block; font-family: 'Black Han Sans', 'Rubik', 'Noto Sans JP', 'Noto Sans SC', sans-serif; font-weight: 400; font-size: 1.1rem; color: var(--red); }
+.m3d-title span { font-size: .8rem; color: var(--rust-dark); }
+.m3d-filters { position: absolute; right: 12px; top: 12px; display: flex; flex-wrap: wrap; gap: 6px; justify-content: flex-end; max-width: calc(100% - 300px); }
+.m3d button { font: inherit; }
+.m3d-chip, .m3d-list button, .m3d-home, .m3d-x {
+  font-size: 14px; font-weight: 700; color: var(--ink); background: var(--cream); border: 2px solid var(--ink);
+  border-radius: 999px; padding: 4px 12px; white-space: nowrap; cursor: pointer;
+}
+.m3d-chip { display: inline-flex; align-items: center; gap: 6px; opacity: .55; }
+.m3d-chip.act { opacity: 1; background: #fff8e2; }
+.m3d-dot { width: 10px; height: 10px; border-radius: 50%; display: inline-block; flex: none; border: 1px solid rgba(0, 0, 0, .35); }
+.m3d-card { left: 12px; top: 94px; width: min(300px, calc(100% - 24px)); padding: 12px 14px; border-radius: 16px; display: flex; flex-direction: column; gap: 6px; }
+.m3d-card-head { display: flex; align-items: center; gap: 8px; }
+.m3d-card-head b { flex: 1; font-size: 1.1rem; }
+.m3d-x { padding: 1px 9px; }
+.m3d-card-type { font-size: .8rem; color: var(--rust-dark); }
+.m3d-card p { margin: 0; font-size: .85rem; line-height: 1.55; }
+.m3d-add { align-self: flex-start; }
+.m3d-dock {
+  left: 50%; bottom: 12px; transform: translateX(-50%); width: min(900px, calc(100% - 20px));
+  padding: 8px 10px; border-radius: 20px; display: flex; gap: 6px; align-items: center;
+}
+.m3d-list { display: flex; gap: 6px; overflow-x: auto; flex: 1; padding: 2px; scrollbar-width: thin; }
+.m3d-list button { display: inline-flex; align-items: center; gap: 6px; flex: none; }
+.m3d-list button.sel { background: var(--red); color: var(--cream); }
+.m3d-home { flex: none; background: var(--mustard); }
+@media (max-width: 575px) { .m3d-filters { max-width: 100%; top: 70px; right: 8px; } .m3d-card { top: 150px; } }
+.m3d .m3d-add.plus-btn { width: auto; height: auto; padding: .3rem .9rem; display: inline-flex; align-items: center; border-radius: 999px; font-size: .9rem; }

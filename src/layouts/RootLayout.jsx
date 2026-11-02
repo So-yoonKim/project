@@ -1,5 +1,5 @@
 import { useEffect } from 'react'
-import { NavLink, Outlet } from 'react-router-dom'
+import { NavLink, Outlet, useLocation } from 'react-router-dom'
 import { Badge, Button, Container, Nav, Navbar, Toast, ToastContainer } from 'react-bootstrap'
 import { NAV_ITEMS } from '../router'
 import { useAppStore } from '../store/useAppStore'
@@ -15,6 +15,8 @@ export default function RootLayout() {
   const setCartOpen = useAppStore((s) => s.setCartOpen)
   const loadCart = useAppStore((s) => s.loadCart)
 
+  const wide = useLocation().pathname === '/map3d'
+
   useEffect(() => { loadCart() }, [loadCart]) // 앱을 열 때 Supabase 에서 내 나들이 불러오기
   useEffect(() => { document.documentElement.lang = lang; document.title = t('brand') }, [lang, t])
 
@@ -27,6 +29,9 @@ export default function RootLayout() {
           </Navbar.Brand>
           <div className="d-flex align-items-center gap-2 order-xl-last flex-shrink-0">
             <LangSwitcher />
+            <Button as={NavLink} to="/map3d" className="cart-btn top-fixed" aria-label={t('m3d.button')}>
+              <i className="bi bi-badge-3d-fill me-1" />{t('m3d.button')}
+            </Button>
             <Button className="cart-btn top-fixed" onClick={() => setCartOpen(true)} aria-label={t('cart.open')}>
               <i className="bi bi-basket3-fill me-1" />{t('cart.button')}
               {cartCount > 0 && <Badge pill className="cart-count ms-2">{cartCount}</Badge>}
@@ -45,10 +50,9 @@ export default function RootLayout() {
         </Container>
       </Navbar>
 
-      <main className="flex-grow-1 py-4">
-        <Container>
-          <Outlet />
-        </Container>
+      {/* 3D 지도는 화면 가득, 나머지 화면은 가운데 정렬 */}
+      <main className={`flex-grow-1 ${wide ? '' : 'py-4'}`}>
+        {wide ? <Outlet /> : <Container><Outlet /></Container>}
       </main>
 
       <footer className="shop-footer py-3">
