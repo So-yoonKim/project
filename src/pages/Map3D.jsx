@@ -30,6 +30,7 @@ export default function Map3D() {
   const cart = useAppStore((s) => s.cart)
   const addToCart = useAppStore((s) => s.addToCart)
   const toast = useAppStore((s) => s.toast)
+  const seedTranslations = useAppStore((s) => s.seedTranslations)
   const text = TEXT[lang] ?? TEXT.ko
 
   const rootRef = useRef(null)
@@ -111,7 +112,10 @@ export default function Map3D() {
   const inCart = sel && cart.some((c) => c.key === key)
   function add() {
     const info = TYPES[sel.type]
-    addToCart({ key, title: text.names[selected], addr: '', lat: sel.lat, lng: sel.lng, icon: info.icon, cat: info.cat })
+    // 장바구니에는 한국어 원문 이름을 저장하고, 이미 가진 4개 언어 이름을 번역 저장소에 미리 넣어 AI 번역 없이 보이게 한다
+    const ko = TEXT.ko.names[selected]
+    seedTranslations(Object.fromEntries(['en', 'zh', 'ja', 'ru'].map((l) => [`${l}|${ko}`, TEXT[l].names[selected]])))
+    addToCart({ key, title: ko, addr: '', lat: sel.lat, lng: sel.lng, icon: info.icon, cat: info.cat })
     toast(t('place.added', { title: text.names[selected] }))
   }
 

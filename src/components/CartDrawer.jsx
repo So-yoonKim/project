@@ -4,6 +4,7 @@ import { Button, Form, InputGroup, Offcanvas } from 'react-bootstrap'
 import { isSupabaseReady } from '../lib/supabase'
 import { useAppStore } from '../store/useAppStore'
 import { useT } from '../i18n/useT'
+import { useTranslate } from '../i18n/useTranslate'
 
 // 장바구니: 담은 나들이 전체 목록, - 버튼으로 삭제 / 닉네임을 입력하면 Supabase 에 저장
 export default function CartDrawer() {
@@ -16,6 +17,7 @@ export default function CartDrawer() {
   const nickname = useAppStore((s) => s.nickname)
   const setNickname = useAppStore((s) => s.setNickname)
   const synced = useAppStore((s) => s.cartSynced)
+  const tt = useTranslate(cart.flatMap((c) => [c.title, c.addr]))
   const [draft, setDraft] = useState(nickname)
   const navigate = useNavigate()
 
@@ -70,10 +72,11 @@ export default function CartDrawer() {
                 <li key={c.key} className="tag-item">
                   <span className="tag-img tag-img-empty"><i className={`bi bi-${c.icon ?? 'geo-alt'}`} /></span>
                   <div className="tag-text">
-                    <div className="tag-title"><span className="cat-chip">{t(`cat.${c.cat}.label`)}</span>{c.title}</div>
-                    <div className="tag-addr"><i className="bi bi-geo-alt-fill me-1" />{c.addr || t('place.noAddr')}</div>
+                    <div className="tag-title"><span className="cat-chip">{t(`cat.${c.cat}.label`)}</span>{tt(c.title)}</div>
+                    {tt(c.title) !== c.title && <div className="tag-orig">{c.title}</div>}
+                    <div className="tag-addr"><i className="bi bi-geo-alt-fill me-1" />{tt(c.addr) || t('place.noAddr')}</div>
                   </div>
-                  <Button className="minus-btn" aria-label={t('cart.remove', { title: c.title })} onClick={() => remove(c.key)}>
+                  <Button className="minus-btn" aria-label={t('cart.remove', { title: tt(c.title) })} onClick={() => remove(c.key)}>
                     <i className="bi bi-dash-lg" />
                   </Button>
                 </li>

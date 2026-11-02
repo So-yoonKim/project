@@ -371,3 +371,4 @@ body {
   color: var(--ink); background: #fff8e2; border: 3px solid var(--ink); border-radius: 10px;
 }
 .nav-drawer-links a.active { background: var(--mustard); }
+.tag-orig { font-size: .78rem; font-weight: 500; color: var(--rust-dark); opacity: .75; }

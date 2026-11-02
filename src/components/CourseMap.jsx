@@ -4,6 +4,7 @@ import 'leaflet/dist/leaflet.css'
 import { useAppStore } from '../store/useAppStore'
 import { makeT } from '../i18n/useT'
 import { hasCoords } from '../lib/geo'
+import { useTranslate } from '../i18n/useTranslate'
 
 // 장바구니에 담은 장소를 지도 위에 번호 핀으로 꽂고, 담은 순서대로 선으로 잇는다.
 // 지도: OpenStreetMap (키·결제 불필요). 이 파일은 Home 에서 lazy 로 불러온다.
@@ -12,6 +13,7 @@ const JEJU = [33.38, 126.55]
 export default function CourseMap() {
   const lang = useAppStore((s) => s.lang)
   const cart = useAppStore((s) => s.cart)
+  const tt = useTranslate(cart.flatMap((c) => [c.title, c.addr]))
   const boxRef = useRef(null)
   const mapRef = useRef(null)
   const layerRef = useRef(null)
@@ -44,9 +46,9 @@ export default function CourseMap() {
       const icon = L.divIcon({ className: 'map-pin', html: `<span>${i + 1}</span>`, iconSize: [32, 32], iconAnchor: [16, 16] })
       const box = document.createElement('div') // 텍스트로 넣어서 이름에 특수문자가 있어도 안전
       const title = document.createElement('strong')
-      title.textContent = c.title
+      title.textContent = tt(c.title)
       const addr = document.createElement('div')
-      addr.textContent = c.addr || t('place.noAddr')
+      addr.textContent = tt(c.addr) || t('place.noAddr')
       const link = document.createElement('a')
       link.href = `https://www.google.com/maps/search/?api=1&query=${c.lat},${c.lng}`
       link.target = '_blank'
@@ -60,7 +62,7 @@ export default function CourseMap() {
     if (points.length > 1) map.fitBounds(points, { padding: [40, 40], maxZoom: 13 })
     else if (points.length === 1) map.setView(points[0], 12)
     else map.setView(JEJU, 9)
-  }, [cart, lang])
+  }, [cart, lang, tt])
 
   return <div ref={boxRef} className="course-map" />
 }

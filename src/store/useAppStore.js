@@ -1,10 +1,11 @@
 import { create } from 'zustand'
 import { persist } from 'zustand/middleware'
-import { askAgent } from '../api/client'
+import { askAgent, translateTexts } from '../api/client'
 import { supabase } from '../lib/supabase'
 import { CATEGORIES } from '../data/categories'
 
 const ICON = Object.fromEntries(CATEGORIES.map((c) => [c.id, c.icon]))
+const asked = new Set() // 이미 번역을 요청한 "언어|문장" (화면을 다시 그려도 중복 요청하지 않게)
 
 // ── 앱 전체가 함께 쓰는 상태 ──────────────────────────────
 export const useAppStore = create(
@@ -21,6 +22,24 @@ export const useAppStore = create(
       // ② 언어 — ko | en | zh | ja | ru (새로고침해도 유지)
       lang: 'ko',
       setLang: (lang) => set({ lang }),
+
+      // ②-2 장소 이름·주소 번역 저장소 — { 'en|협재해수욕장': 'Hyeopjae Beach' }. 번역한 건 브라우저에 남겨 다시 부르지 않는다
+      tr: {},
+      seedTranslations: (entries) => set({ tr: { ...get().tr, ...entries } }), // 이미 아는 번역을 미리 넣는다 (3D 지도의 이름 등)
+      requestTranslate: async (texts) => {
+        const lang = get().lang
+        if (lang === 'ko') return
+        const need = [...new Set(texts)].filter((t) => t && !get().tr[`${lang}|${t}`] && !asked.has(`${lang}|${t}`))
+        if (!need.length) return
+        need.forEach((t) => asked.add(`${lang}|${t}`)) // 실패해도 같은 문장을 계속 다시 묻지 않는다
+        for (let i = 0; i < need.length; i += 40) { // 서버는 한 번에 40개까지
+          const chunk = need.slice(i, i + 40)
+          try {
+            const { translations } = await translateTexts(lang, chunk)
+            set({ tr: { ...get().tr, ...Object.fromEntries(chunk.map((t, k) => [`${lang}|${t}`, translations[k]])) } })
+          } catch { /* 번역이 안 되면 한국어 원문을 그대로 보여준다 */ }
+        }
+      },
 
       // ③ 닉네임 — 이 이름으로 Supabase trips 테이블에 장바구니를 저장합니다
       nickname: '',
@@ -95,7 +114,7 @@ export const useAppStore = create(
     }),
     {
       name: 'seolmundae-store',
-      partialize: (s) => ({ nickname: s.nickname, cart: s.cart, lang: s.lang }),
+      partialize: (s) => ({ nickname: s.nickname, cart: s.cart, lang: s.lang, tr: s.tr }),
     },
   ),
 )
