@@ -72,6 +72,19 @@
 - **날씨 연동**: 기상청 예보(제주시)를 가져와 비·눈이면 빗방울·눈송이와 물결, 흐리면 안개와 어두운 구름이 나와요. 오른쪽 아래 `날씨 미리보기` 로 맑음·구름·흐림·비·눈을 직접 골라 볼 수 있고, `실제` 를 누르면 지금 날씨로 돌아와요
 - three.js 는 이 화면에 들어갈 때만 불러와요 (지연 로딩)
 
+#### 날씨에 따라 바뀌는 모습
+
+<table>
+<tr>
+<td width="50%"><img src="docs/weather-clear.png" alt="맑음"><br><sub><b>맑음</b> — 평소 모습</sub></td>
+<td width="50%"><img src="docs/weather-overcast.webp" alt="흐림"><br><sub><b>흐림</b> — 안개와 어두운 구름</sub></td>
+</tr>
+<tr>
+<td width="50%"><img src="docs/weather-rain.webp" alt="비"><br><sub><b>비</b> — 빗방울과 바다에 퍼지는 물결</sub></td>
+<td width="50%"><img src="docs/weather-snow.webp" alt="눈"><br><sub><b>눈</b> — 눈송이</sub></td>
+</tr>
+</table>
+
 ## 📡 사용한 공공데이터 API
 
 | # | API | 제공 | 용도 |
