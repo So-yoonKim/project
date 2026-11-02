@@ -31,6 +31,8 @@ export const useAppStore = create(
 
       // ④ 장바구니(나들이 리스트) — 닉네임이 있으면 Supabase 와 동기화, 없으면 이 브라우저에만 저장
       cart: [], // { key, title, addr, lat, lng, cat, icon }
+      stage: 'intro', // 홈 화면 단계: intro(첫 화면) → shop(카드 진열대). 저장하지 않는다
+      setStage: (stage) => set({ stage }),
       cartOpen: false,
       setCartOpen: (cartOpen) => set({ cartOpen }),
       cartSynced: false, // 마지막 저장·불러오기가 Supabase 에 성공했는지

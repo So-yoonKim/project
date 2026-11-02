@@ -23,6 +23,7 @@ export default function CartDrawer() {
   const goMap = useRef(false)
   function showMap() {
     goMap.current = true
+    useAppStore.getState().setStage('shop') // 첫 화면에는 지도가 없으니 진열대 화면으로 넘긴다
     setOpen(false)
     navigate('/')
   }

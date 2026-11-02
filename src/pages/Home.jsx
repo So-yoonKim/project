@@ -26,6 +26,8 @@ async function loadCategory(cat) {
 export default function Home() {
   const t = useT()
   const cart = useAppStore((s) => s.cart)
+  const stage = useAppStore((s) => s.stage)
+  const setStage = useAppStore((s) => s.setStage)
   const noCoords = cart.filter((c) => !hasCoords(c)).length
   const [openId, setOpenId] = useState(null)  // 지금 펼쳐진 카테고리 (없으면 null)
   const [data, setData] = useState({})         // 카테고리id → 불러온 데이터 (한 번 받으면 재사용)
@@ -51,11 +53,30 @@ export default function Home() {
   const cat = CATEGORIES.find((c) => c.id === openId)
   const items = cat && data[cat.id]
 
-  return (
-    <>
-      <section className="hero">
+  function enter(next) {
+    setStage(next)
+    window.scrollTo({ top: 0, behavior: 'instant' })
+  }
+
+  // 1단계: 가게 앞 — 간판 버튼만 보인다
+  if (stage === 'intro') {
+    return (
+      <section className="hero stage-in" key="intro">
         <Halmang />
-        <h1 className="hero-sign">{t('hero.sign')}</h1>
+        <button type="button" className="hero-sign hero-sign-btn" onClick={() => enter('shop')}>
+          {t('hero.sign')}
+        </button>
+      </section>
+    )
+  }
+
+  // 2단계: 가게 안 — 카드 6장, 카드를 누르면 목록
+  return (
+    <div className="stage-in" key="shop">
+      <section className="hero shop-top">
+        <button type="button" className="back-btn" onClick={() => enter('intro')}>
+          <i className="bi bi-arrow-left me-1" />{t('hero.back')}
+        </button>
         <p className="hero-intent">{t('hero.intent')}</p>
         <HalmangNote />
       </section>
@@ -84,6 +105,6 @@ export default function Home() {
         </Suspense>
         {noCoords > 0 && <p className="map-note mt-2 mb-0">{t('map.noCoords', { n: noCoords })}</p>}
       </section>
-    </>
+    </div>
   )
 }

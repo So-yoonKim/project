@@ -86,6 +86,21 @@ body {
   transform: rotate(-1.5deg);
 }
 
+/* 첫 화면의 간판 버튼 + 화면 전환 */
+.hero-sign-btn { cursor: pointer; font-family: inherit; transition: transform .15s; animation: sign-bounce 1.6s ease-in-out infinite; }
+.hero-sign-btn:hover, .hero-sign-btn:focus-visible { transform: rotate(-1.5deg) scale(1.06); animation: none; background: #26874b; }
+.hero-sign-btn:active { transform: rotate(-1.5deg) translate(3px, 3px); box-shadow: 2px 2px 0 var(--ink); }
+@keyframes sign-bounce { 0%, 100% { transform: rotate(-1.5deg) translateY(0); } 50% { transform: rotate(-1.5deg) translateY(-5px); } }
+.stage-in { animation: stage-in .45s ease-out; }
+@keyframes stage-in { from { opacity: 0; transform: translateY(24px) scale(.97); } to { opacity: 1; transform: none; } }
+.shop-top { margin-bottom: 0; }
+.back-btn {
+  display: inline-block; padding: .3rem .9rem; font-weight: 800; color: var(--ink); background: var(--cream);
+  border: 3px solid var(--ink); border-radius: 999px; box-shadow: 3px 3px 0 var(--ink);
+}
+.back-btn:hover { background: var(--mustard); }
+@media (prefers-reduced-motion: reduce) { .hero-sign-btn, .stage-in { animation: none; } }
+
 /* ── 설문대할망 포스트잇 ────────────────────────── */
 .hero { position: relative; }
 .postit {
