@@ -47,6 +47,10 @@
 <td width="50%"><img src="docs/cards.png" alt="카드 6장 진열대"><br><sub><b>6개 진열대</b> — 카드를 누르면 목록이 펼쳐져요</sub></td>
 <td width="50%"><img src="docs/3d-map.jpg" alt="3D 제주 지도"><br><sub><b>3D 제주 지도</b> — 돌하르방 핀 30곳</sub></td>
 </tr>
+<tr>
+<td width="50%"><img src="docs/course-map.jpg" alt="내 코스 지도"><br><sub><b>내 코스 지도</b> — 담은 순서대로 번호 핀과 점선으로 경로를 보여줘요 (예시 코스)</sub></td>
+<td width="50%"><img src="docs/cart-drawer.png" alt="장바구니와 할망의 당부" width="260"><br><sub><b>장바구니와 할망의 당부</b> — 코스를 담으면 노란 포스트잇이 나타나요</sub></td>
+</tr>
 </table>
 
 **사용 흐름**: 간판 버튼 `제주나들이 골라봅서!` → 카드 6장 → 목록에서 `+` 로 담기 → 장바구니 → 코스 지도
