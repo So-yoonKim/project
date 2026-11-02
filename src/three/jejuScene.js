@@ -232,7 +232,9 @@ export function createJejuScene({ container, labelsEl, places, types, names, bac
   const cv = renderer.domElement
   let down = null
   const onDown = (e) => { down = [e.clientX, e.clientY] }
-  const onUp = (e) => { if (!down) return; const m = Math.hypot(e.clientX - down[0], e.clientY - down[1]); down = null; if (m > 6) return; const p = pick(e); if (p) { select(p.i); onSelect?.(p.i) } }
+  const onUp = (e) => { if (!down) return; const m = Math.hypot(e.clientX - down[0], e.clientY - down[1]); down = null; if (m > 6) return; const p = pick(e); if (p) { // 선택된 핀을 다시 누르면 선택 해제
+      if (p === selected) { selected = null; onSelect?.(null) } else { select(p.i); onSelect?.(p.i) }
+    } }
   const onMove = (e) => { if (e.pointerType !== 'mouse' || e.buttons) { hovered = null; return } hovered = pick(e); cv.style.cursor = hovered ? 'pointer' : '' }
   cv.addEventListener('pointerdown', onDown); cv.addEventListener('pointerup', onUp); cv.addEventListener('pointermove', onMove)
 

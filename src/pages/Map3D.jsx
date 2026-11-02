@@ -47,7 +47,10 @@ export default function Map3D() {
     if (btn) list.scrollTo({ left: btn.offsetLeft - list.clientWidth / 2 + btn.clientWidth / 2, behavior: 'smooth' })
   }, [selected])
 
-  function pick(i) { sceneRef.current?.select(i); setSelected(i) }
+  function pick(i) {
+    if (i === selected) return closeCard() // 선택된 것을 다시 누르면 해제
+    sceneRef.current?.select(i); setSelected(i)
+  }
   function closeCard() { sceneRef.current?.clearSelection(); setSelected(null) }
   function home() { sceneRef.current?.home(); setSelected(null) }
   function toggleType(k) {
