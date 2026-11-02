@@ -71,9 +71,9 @@ export const MESSAGES = {
     'notfound.back': '가게로 돌아가기',
 
     'note.title': '설문대할망은 누구?',
-    'note.l1': '제주 창세 신화에 나오는 거인 여신이에요. 제주 사람들은 할머니를 "할망"이라 불러요.',
-    'note.l2': '치마폭에 흙을 담아 나르며 한라산을 쌓았고, 그때 흘린 흙이 오름이 되었대요.',
-    'note.l3': '설문대할망이 여러분을 위해 여행선물을 준비했답니다',
+    'note.l1': '엄청나게 큰 몸을 지니고 있어서 바다에 서면 발목 밖에 차지 않았고',
+    'note.l2': '흙을 퍼담아 한라산을 만들었고 한라산을 만들다가 흘린 흙이\n360여 개의 오름이 되었어요 한라산 봉우리를 던져서\n제주 남쪽 산방산이 만들어졌지요',
+    'note.l3': '설문대할망이 여러분을 위해 제주여행선물을 준비했답니다',
   },
 
   en: {
@@ -138,9 +138,9 @@ export const MESSAGES = {
     'notfound.back': 'Back to the shop',
 
     'note.title': 'Who is Seolmundae Halmang?',
-    'note.l1': 'She is the giant goddess of Jeju\'s creation myth. In Jeju dialect, "halmang" means grandmother.',
-    'note.l2': 'She carried earth in her skirt to pile up Mt. Halla, and the soil that spilled became the oreum.',
-    'note.l3': 'Seolmundae Halmang has prepared a travel gift just for you.',
+    'note.l1': 'Her body was so enormous that when she stood in the sea, the water only reached her ankles.',
+    'note.l2': 'She scooped up earth and built Mt. Halla. The soil she spilled while building it became more than 360 oreum, and the peak she threw down became Sanbangsan in southern Jeju.',
+    'note.l3': 'Seolmundae Halmang has prepared a Jeju travel gift just for you.',
   },
 
   zh: {
@@ -205,9 +205,9 @@ export const MESSAGES = {
     'notfound.back': '回到商店',
 
     'note.title': '设文大婆婆（설문대할망）是谁？',
-    'note.l1': '她是济州创世神话中的巨人女神。济州方言里把奶奶叫作“할망（婆婆）”。',
-    'note.l2': '她用裙摆兜土搬运，堆起了汉拿山，洒落的泥土就变成了 오름（寄生火山）。',
-    'note.l3': '设文大婆婆（설문대할망）为大家准备了旅行礼物。',
+    'note.l1': '她的身躯无比巨大，站在海里，海水也只到脚踝。',
+    'note.l2': '她捧起泥土，堆成了汉拿山。堆山时洒落的泥土，变成了360多座 오름（寄生火山），而她扔出去的汉拿山峰顶，就成了济州南部的山房山。',
+    'note.l3': '设文大婆婆（설문대할망）为大家准备了济州旅行礼物。',
   },
 
   ja: {
@@ -272,9 +272,9 @@ export const MESSAGES = {
     'notfound.back': 'お店に戻る',
 
     'note.title': 'ソルムンデハルマンって誰？',
-    'note.l1': '済州の創世神話に登場する巨人の女神です。済州の方言でおばあさんのことを「ハルマン」と呼びます。',
-    'note.l2': 'スカートに土を入れて運び、漢拏山を築きました。こぼれた土がオルム（寄生火山）になったそうです。',
-    'note.l3': 'ソルムンデハルマンが、みなさんのために旅のプレゼントを用意しましたよ。',
+    'note.l1': 'とても大きな体で、海に立っても足首までしか水に浸からなかったそうです。',
+    'note.l2': '土をすくって漢拏山をつくりました。そのときこぼれた土が360あまりのオルム（寄生火山）になり、投げた漢拏山の頂が済州南部の山房山になりました。',
+    'note.l3': 'ソルムンデハルマンが、みなさんのために済州の旅のプレゼントを用意しましたよ。',
   },
 
   ru: {
@@ -339,8 +339,8 @@ export const MESSAGES = {
     'notfound.back': 'Вернуться в магазин',
 
     'note.title': 'Кто такая Сольмундэ Халман?',
-    'note.l1': 'Это великанша-богиня из мифа о сотворении Чеджу. На диалекте Чеджу «халман» значит бабушка.',
-    'note.l2': 'Она носила землю в подоле и насыпала гору Халласан, а рассыпанная земля стала орымами.',
-    'note.l3': 'Сольмундэ Халман приготовила для вас подарок к путешествию.',
+    'note.l1': 'Она была так огромна, что когда стояла в море, вода доходила ей лишь до щиколоток.',
+    'note.l2': 'Она черпала землю и насыпала гору Халласан. Земля, которую она просыпала при этом, превратилась в более чем 360 орымов, а брошенная вершина стала горой Санбансан на юге Чеджу.',
+    'note.l3': 'Сольмундэ Халман приготовила для вас подарок к путешествию по Чеджу.',
   },
 }

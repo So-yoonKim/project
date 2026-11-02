@@ -120,7 +120,7 @@ body {
   background: linear-gradient(#fff3a8, #ffe97a); border-radius: 2px 2px 14px 2px;
   box-shadow: 4px 6px 0 rgba(0, 0, 0, .45); transform: rotate(2deg);
 }
-.postit p { margin-bottom: .45rem; }
+.postit p { margin-bottom: .45rem; white-space: pre-line; } /* 번역문 안의 줄바꿈(\n)을 그대로 보여준다 */
 .postit-title { font-family: 'Black Han Sans', 'Rubik', 'Noto Sans JP', 'Noto Sans SC', sans-serif; font-size: 1.15rem; color: var(--red); margin-bottom: .5rem; }
 .postit-pin {
   position: absolute; top: -9px; left: 50%; width: 18px; height: 18px; margin-left: -9px; border-radius: 50%;
