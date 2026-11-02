@@ -347,3 +347,27 @@ body {
   .m3d-dock .m3d-home, .m3d-dock .m3d-list { display: none; }
   .m3d-dock-filters { display: flex; gap: 6px; flex: 1; overflow-x: auto; scrollbar-width: none; }
 }
+
+/* ── 폰·태블릿: ☰ 버튼과 오른쪽 옆 메뉴 ─────────────── */
+.nav-burger {
+  position: relative; flex: none; font-size: 1.7rem; line-height: 1; padding: 2px 9px; cursor: pointer;
+  color: var(--ink); background: var(--mustard); border: 3px solid var(--ink); border-radius: 10px; box-shadow: 3px 3px 0 var(--ink);
+}
+.nav-burger:active { transform: translate(2px, 2px); box-shadow: none; }
+.nav-burger-count { position: absolute; top: -10px; right: -10px; font-size: 12px; }
+.offcanvas.nav-drawer { --bs-offcanvas-width: min(320px, 86vw); width: min(320px, 86vw); background: var(--cream); border-left: 6px solid var(--ink); }
+.nav-drawer .offcanvas-title { color: var(--red); }
+.nav-drawer .offcanvas-body { display: flex; flex-direction: column; gap: 1.1rem; }
+.lang-inline { display: flex; flex-wrap: wrap; gap: 6px; }
+.lang-inline button {
+  font-size: 15px; font-weight: 800; padding: 4px 12px; cursor: pointer; color: var(--ink);
+  background: #fff8e2; border: 2px solid var(--ink); border-radius: 999px;
+}
+.lang-inline button.act { background: var(--red); color: var(--cream); }
+.nav-drawer-actions { display: flex; flex-direction: column; gap: 10px; }
+.nav-drawer-actions .cart-btn { --bs-btn-font-size: 16px; text-align: left; width: 100%; }
+.nav-drawer-links a {
+  display: block; margin-bottom: 8px; padding: .65rem .9rem; font-size: 1.1rem; font-weight: 800; text-decoration: none;
+  color: var(--ink); background: #fff8e2; border: 3px solid var(--ink); border-radius: 10px;
+}
+.nav-drawer-links a.active { background: var(--mustard); }

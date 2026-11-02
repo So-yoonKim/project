@@ -11,7 +11,7 @@ export const LANGS = [
 export const MESSAGES = {
   ko: {
     'brand': '설문대할망이 담아주는 제주나들이',
-    'nav.home': '나들이 골라봅서',
+    'nav.home': '나들이 골라봅서', 'nav.menu': '메뉴',
     'nav.agent': '할망에게 물어봅서',
     'nav.check': '동작 체크',
     'hero.sign': '제주나들이 골라봅서!',
@@ -83,7 +83,7 @@ export const MESSAGES = {
 
   en: {
     'brand': 'Jeju Outings, Packed by Grandma Seolmundae',
-    'nav.home': 'Pick an outing',
+    'nav.home': 'Pick an outing', 'nav.menu': 'Menu',
     'nav.agent': 'Ask Halmang',
     'nav.check': 'Status check',
     'hero.sign': 'Pick your Jeju outing!',
@@ -155,7 +155,7 @@ export const MESSAGES = {
 
   zh: {
     'brand': '设文大婆婆为你装满的济州出游',
-    'nav.home': '挑选出游',
+    'nav.home': '挑选出游', 'nav.menu': '菜单',
     'nav.agent': '问问婆婆',
     'nav.check': '运行检查',
     'hero.sign': '来挑选济州出游吧！',
@@ -227,7 +227,7 @@ export const MESSAGES = {
 
   ja: {
     'brand': 'ソルムンデハルマンが詰めてくれる済州おでかけ',
-    'nav.home': 'おでかけを選ぶ',
+    'nav.home': 'おでかけを選ぶ', 'nav.menu': 'メニュー',
     'nav.agent': 'ハルマンに聞く',
     'nav.check': '動作チェック',
     'hero.sign': '済州おでかけを選んでね！',
@@ -299,7 +299,7 @@ export const MESSAGES = {
 
   ru: {
     'brand': 'Прогулки по Чеджу от бабушки Сольмундэ',
-    'nav.home': 'Выбрать прогулку',
+    'nav.home': 'Выбрать прогулку', 'nav.menu': 'Меню',
     'nav.agent': 'Спросить бабушку',
     'nav.check': 'Проверка работы',
     'hero.sign': 'Выбирай прогулку по Чеджу!',
