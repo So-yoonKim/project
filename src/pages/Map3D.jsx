@@ -32,6 +32,7 @@ export default function Map3D() {
   const toast = useAppStore((s) => s.toast)
   const text = TEXT[lang] ?? TEXT.ko
 
+  const rootRef = useRef(null)
   const stageRef = useRef(null)
   const labelsRef = useRef(null)
   const listRef = useRef(null)
@@ -68,6 +69,17 @@ export default function Map3D() {
     return () => { scene.dispose(); sceneRef.current = null }
   }, [])
 
+  // 위쪽 메뉴(폰에서는 두 줄이 되기도 함)를 뺀 나머지를 화면 높이로 쓴다
+  useEffect(() => {
+    const nav = document.querySelector('.shop-nav'), el = rootRef.current
+    const fit = () => { el.style.height = `calc(100svh - ${nav?.offsetHeight ?? 76}px)` }
+    fit()
+    const ro = new ResizeObserver(fit)
+    if (nav) ro.observe(nav)
+    window.addEventListener('resize', fit)
+    return () => { ro.disconnect(); window.removeEventListener('resize', fit) }
+  }, [])
+
   useEffect(() => { namesRef.current = text.names; sceneRef.current?.setNames(text.names) }, [text])
 
   // 선택한 핀의 버튼이 아래 목록 가운데에 오게 한다
@@ -99,11 +111,13 @@ export default function Map3D() {
   }
 
   return (
-    <div className="m3d">
+    <div ref={rootRef} className="m3d">
       <div ref={stageRef} className="m3d-stage" />
       <div ref={labelsRef} className="m3d-labels" />
       {failed && <div className="m3d-fail">{t('m3d.noWebgl')}</div>}
 
+      {/* 폰에서는 위쪽 묶음·아래쪽 묶음이 각각 세로로 쌓여서 겹치지 않는다 (넓은 화면에서는 제자리에 흩어 놓는다) */}
+      <div className="m3d-top">
       <div className="m3d-title">
         <b>🗿 {t('m3d.title')}</b>
         <span>{t('m3d.sub', { n: PLACES.length })}</span>
@@ -120,7 +134,9 @@ export default function Map3D() {
           </button>
         ))}
       </div>
+      </div>
 
+      <div className="m3d-bottom">
       {sel && (
         <div className="m3d-card">
           <div className="m3d-card-head">
@@ -154,6 +170,7 @@ export default function Map3D() {
             </button>
           ))}
         </div>
+      </div>
       </div>
     </div>
   )
