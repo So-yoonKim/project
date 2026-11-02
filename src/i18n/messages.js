@@ -73,7 +73,7 @@ export const MESSAGES = {
     'note.title': '설문대할망은 누구?',
     'note.l1': '제주 창세 신화에 나오는 거인 여신이에요. 제주 사람들은 할머니를 "할망"이라 불러요.',
     'note.l2': '치마폭에 흙을 담아 나르며 한라산을 쌓았고, 그때 흘린 흙이 오름이 되었대요.',
-    'note.l3': '그래서 이 가게의 오름 코너는 할망의 선물이랍니다.',
+    'note.l3': '설문대할망이 여러분을 위해 여행선물을 준비했답니다',
   },
 
   en: {
@@ -140,7 +140,7 @@ export const MESSAGES = {
     'note.title': 'Who is Seolmundae Halmang?',
     'note.l1': 'She is the giant goddess of Jeju\'s creation myth. In Jeju dialect, "halmang" means grandmother.',
     'note.l2': 'She carried earth in her skirt to pile up Mt. Halla, and the soil that spilled became the oreum.',
-    'note.l3': "That's why this shop's Oreum corner is Halmang's gift.",
+    'note.l3': 'Seolmundae Halmang has prepared a travel gift just for you.',
   },
 
   zh: {
@@ -207,7 +207,7 @@ export const MESSAGES = {
     'note.title': '设文大婆婆（설문대할망）是谁？',
     'note.l1': '她是济州创世神话中的巨人女神。济州方言里把奶奶叫作“할망（婆婆）”。',
     'note.l2': '她用裙摆兜土搬运，堆起了汉拿山，洒落的泥土就变成了 오름（寄生火山）。',
-    'note.l3': '所以这家店的 오름 专区，是婆婆送给大家的礼物。',
+    'note.l3': '设文大婆婆（설문대할망）为大家准备了旅行礼物。',
   },
 
   ja: {
@@ -274,7 +274,7 @@ export const MESSAGES = {
     'note.title': 'ソルムンデハルマンって誰？',
     'note.l1': '済州の創世神話に登場する巨人の女神です。済州の方言でおばあさんのことを「ハルマン」と呼びます。',
     'note.l2': 'スカートに土を入れて運び、漢拏山を築きました。こぼれた土がオルム（寄生火山）になったそうです。',
-    'note.l3': 'だからこのお店のオルムコーナーは、ハルマンからの贈り物なんです。',
+    'note.l3': 'ソルムンデハルマンが、みなさんのために旅のプレゼントを用意しましたよ。',
   },
 
   ru: {
@@ -341,6 +341,6 @@ export const MESSAGES = {
     'note.title': 'Кто такая Сольмундэ Халман?',
     'note.l1': 'Это великанша-богиня из мифа о сотворении Чеджу. На диалекте Чеджу «халман» значит бабушка.',
     'note.l2': 'Она носила землю в подоле и насыпала гору Халласан, а рассыпанная земля стала орымами.',
-    'note.l3': 'Поэтому уголок орымов в нашем магазине — подарок бабушки.',
+    'note.l3': 'Сольмундэ Халман приготовила для вас подарок к путешествию.',
   },
 }

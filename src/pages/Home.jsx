@@ -61,11 +61,13 @@ export default function Home() {
   // 1단계: 가게 앞 — 간판 버튼만 보인다
   if (stage === 'intro') {
     return (
-      <section className="hero stage-in" key="intro">
+      <section className="hero hero-intro stage-in" key="intro">
+        <p className="hero-intent">{t('hero.intent')}</p>
         <Halmang />
         <button type="button" className="hero-sign hero-sign-btn" onClick={() => enter('shop')}>
           {t('hero.sign')}
         </button>
+        <HalmangNote />
       </section>
     )
   }
@@ -77,8 +79,6 @@ export default function Home() {
         <button type="button" className="back-btn" onClick={() => enter('intro')}>
           <i className="bi bi-arrow-left me-1" />{t('hero.back')}
         </button>
-        <p className="hero-intent">{t('hero.intent')}</p>
-        <HalmangNote />
       </section>
 
       <section className="poster-grid" aria-label={t('hero.sign')}>

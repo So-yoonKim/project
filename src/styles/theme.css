@@ -99,6 +99,17 @@ body {
   border: 3px solid var(--ink); border-radius: 999px; box-shadow: 3px 3px 0 var(--ink);
 }
 .back-btn:hover { background: var(--mustard); }
+/* 첫 화면: 문구는 그림 위 한 줄(한국어), 포스트잇은 간판 아래 가로로 길게 */
+.hero-intro .hero-intent { max-width: none; margin: 0 0 1rem; font-size: clamp(.62rem, 2.5vw, 1.05rem); }
+:lang(ko) .hero-intro .hero-intent { white-space: nowrap; }
+.hero-intro .postit {
+  position: relative; top: auto; left: auto; width: 100%; margin: 1.6rem 0 0; padding: 1.3rem 1.4rem 1rem;
+  transform: rotate(-.8deg); display: grid; grid-template-columns: auto 1fr; column-gap: 1.2rem; align-items: center;
+}
+.hero-intro .postit-title { margin: 0; text-align: center; }
+.hero-intro .postit-lines { display: grid; gap: .1rem; }
+.hero-intro .postit-lines p { margin: 0; }
+@media (max-width: 575px) { .hero-intro .postit { grid-template-columns: 1fr; } .hero-intro .postit-title { margin-bottom: .4rem; } }
 @media (prefers-reduced-motion: reduce) { .hero-sign-btn, .stage-in { animation: none; } }
 
 /* ── 설문대할망 포스트잇 ────────────────────────── */
