@@ -2,6 +2,8 @@ import Anthropic from '@anthropic-ai/sdk';
 import { searchPlaces } from '../server/places.js';
 import { getWeather } from '../server/weather.js';
 import { searchHeritage } from '../server/heritage.js';
+import { runGemini } from '../server/gemini.js';
+import { practiceAnswer } from '../server/practice.js';
 
 const client = new Anthropic({ apiKey: process.env.ANTHROPIC_API_KEY });
 const MODEL = 'claude-sonnet-5-5';
@@ -64,6 +66,16 @@ export default async function handler(req, res) {
   const steps = []; // 화면에 "에이전트가 무엇을 했는지" 보여주기용
 
   try {
+    // AI 키가 하나도 없으면 연습 모드 (무작위 안내 답변, 도구 호출 없음)
+    if (!process.env.GEMINI_API_KEY && !process.env.ANTHROPIC_API_KEY) {
+      return res.status(200).json({ answer: practiceAnswer(lang), steps, practice: true });
+    }
+    // GEMINI_API_KEY 가 있으면 Gemini 로, 없으면 Claude 로 답한다
+    if (process.env.GEMINI_API_KEY) {
+      const out = await runGemini({ system, tools, history: history.slice(-10), message, runTool });
+      return res.status(200).json(out);
+    }
+
     // ③ 에이전트 루프: 생각 → 도구 호출 → 결과 확인 → (반복) → 최종 답
     for (let turn = 0; turn < 5; turn++) {
       const r = await client.messages.create({
@@ -94,6 +106,7 @@ export default async function handler(req, res) {
     res.status(200).json({ answer: '도구 호출이 너무 많아 중단했어요. 질문을 좁혀 주세요.', steps });
   } catch (e) {
     // 429 = 호출 한도 초과, 401 = 키 오류
-    res.status(e.status ?? 500).json({ error: e.status === 429 ? '사용량이 많아요. 1분 뒤 다시 시도하세요.' : e.message });
+    const status = Number.isInteger(e.status) ? e.status : 500;
+    res.status(status).json({ error: status === 429 ? '사용량이 많아요. 1분 뒤 다시 시도하세요.' : e.message });
   }
 }

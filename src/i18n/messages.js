@@ -65,6 +65,7 @@ export const MESSAGES = {
     'agent.placeholder': '할망에게 질문을 입력하세요',
     'agent.thinking': '할망이 도구를 쓰는 중...',
     'agent.count': '{n}건',
+    'agent.practice': '연습 모드 · AI 키가 없어 미리 준비한 답변이에요 (도구 호출 없음)',
 
     'footer': '설문대할망이 담아주는 제주나들이 · 데이터 출처: 제주관광공사 VISIT JEJU · 제주특별자치도 · 기상청 · 국가유산청',
     'notfound.title': '여긴 가게가 아니우다',
@@ -132,6 +133,7 @@ export const MESSAGES = {
     'agent.placeholder': 'Ask Halmang a question',
     'agent.thinking': 'Halmang is using her tools...',
     'agent.count': '{n} results',
+    'agent.practice': 'Practice mode · no AI key, so this is a prepared answer (no tool calls)',
 
     'footer': 'Jeju Outings, Packed by Grandma Seolmundae · Data: Jeju Tourism Organization (VISIT JEJU) · Jeju Special Self-Governing Province · KMA · Korea Heritage Service',
     'notfound.title': 'This is not a shop',
@@ -199,6 +201,7 @@ export const MESSAGES = {
     'agent.placeholder': '请向婆婆提问',
     'agent.thinking': '婆婆正在使用工具……',
     'agent.count': '{n} 条',
+    'agent.practice': '练习模式 · 没有 AI 密钥，这是预先准备的回答（未调用工具）',
 
     'footer': '设文大婆婆为你装满的济州出游 · 数据来源：济州观光公社 VISIT JEJU · 济州特别自治道 · 气象厅 · 国家遗产厅',
     'notfound.title': '这里不是商店',
@@ -266,6 +269,7 @@ export const MESSAGES = {
     'agent.placeholder': 'ハルマンに質問してください',
     'agent.thinking': 'ハルマンがツールを使っています…',
     'agent.count': '{n}件',
+    'agent.practice': '練習モード · AIキーがないため用意した回答です（ツール呼び出しなし）',
 
     'footer': 'ソルムンデハルマンが詰めてくれる済州おでかけ · データ提供：済州観光公社 VISIT JEJU · 済州特別自治道 · 気象庁 · 国家遺産庁',
     'notfound.title': 'ここはお店じゃないよ',
@@ -333,6 +337,7 @@ export const MESSAGES = {
     'agent.placeholder': 'Задайте бабушке вопрос',
     'agent.thinking': 'Бабушка использует инструменты...',
     'agent.count': '{n} шт.',
+    'agent.practice': 'Режим тренировки · нет ключа ИИ, поэтому ответ заготовленный (без вызова инструментов)',
 
     'footer': 'Прогулки по Чеджу от бабушки Сольмундэ · Данные: Туристическая организация Чеджу (VISIT JEJU) · Особая автономная провинция Чеджу · Метеослужба · Служба культурного наследия Кореи',
     'notfound.title': 'Здесь не магазин',

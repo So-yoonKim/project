@@ -84,8 +84,8 @@ export const useAppStore = create(
         const history = get().messages.map((m) => ({ role: m.role, content: m.text }))
         set({ messages: [...get().messages, { role: 'user', text }], chatLoading: true })
         try {
-          const { answer, steps } = await askAgent(text, history, get().lang)
-          set({ messages: [...get().messages, { role: 'assistant', text: answer, steps }] })
+          const { answer, steps, practice } = await askAgent(text, history, get().lang)
+          set({ messages: [...get().messages, { role: 'assistant', text: answer, steps, practice }] })
         } catch (e) {
           get().toast(e.message, 'danger')
         } finally {

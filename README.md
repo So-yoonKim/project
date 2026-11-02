@@ -102,6 +102,7 @@ npm run dev                     # http://localhost:5173  (화면 + /api 함께 �
 |---|---|
 | `DATA_GO_KR_KEY` | 공공데이터포털 **Decoding** 키 (서버 전용) |
 | `ANTHROPIC_API_KEY` | Claude API 키 (서버 전용) |
+| `GEMINI_API_KEY` | Google AI Studio 키 (서버 전용). 있으면 Gemini 가 우선 사용되고, 없으면 Claude 를 씁니다 |
 | `VITE_SUPABASE_URL` | Supabase Project URL (`https://xxxx.supabase.co`) |
 | `VITE_SUPABASE_ANON_KEY` | Supabase anon(publishable) 키 |
 

@@ -25,6 +25,7 @@ export default function Agent() {
         {messages.length === 0 && <div className="chat-hint">{t('agent.hint')}</div>}
         {messages.map((m, i) => (
           <div key={i} className={`msg ${m.role}`}>
+            {m.practice && <div className="small mb-1 opacity-75"><i className="bi bi-mortarboard me-1" />{t('agent.practice')}</div>}
             {m.steps?.length > 0 && (
               <div className="small mb-1 opacity-75">
                 <i className="bi bi-tools me-1" />
