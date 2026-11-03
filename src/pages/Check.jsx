@@ -17,7 +17,7 @@ export default function Check() {
         ? { state: 'ok', msg: '연결 OK · 닉네임 비밀번호 보호 적용됨' }
         : { state: 'fail', msg: error ? `${error.message} — supabase/nickname-pin.sql 을 실행했는지 확인` : '예상과 다른 응답' }))
     ping()
-      .then((d) => setApi({ state: 'ok', msg: `OK · 공공데이터 키 ${d.hasDataKey ? '있음' : '없음'} · Claude 키 ${d.hasClaudeKey ? '있음' : '없음'}` }))
+      .then((d) => setApi({ state: 'ok', msg: `OK · 공공데이터 키 ${d.hasDataKey ? '있음' : '없음'} · Claude 키 ${d.hasClaudeKey ? '있음' : '없음'} · 모델 ${d.claudeModel ?? '?'}` }))
       .catch(() => setApi({ state: 'fail', msg: 'npm run dev 가 아니라 vercel dev 로 실행했는지 확인' }))
   }, [])
 

@@ -1,9 +1,9 @@
 // 장소 이름·주소 번역 (AI). 공공데이터에는 번역이 없어서 서버에서 AI 에게 번역시킨다.
 // 한 번 번역한 문장은 메모리에 저장해 두고 다시 쓴다 (같은 서버가 켜져 있는 동안).
 import Anthropic from '@anthropic-ai/sdk'
+import { CLAUDE_MODEL } from './model.js' // 모델은 server/model.js 에서 고른다 (sonnet 이 고유명사 표기가 더 정확하다)
 
 const LANG_NAME = { en: 'English', zh: 'Simplified Chinese (简体中文)', ja: 'Japanese (日本語)', ru: 'Russian (Русский)' }
-const CLAUDE_MODEL = 'claude-sonnet-5-5' // 고유명사 표기가 더 정확하다. 한 번 번역한 결과는 저장해 두고 다시 쓴다
 
 const cache = new Map() // "언어|원문" → 번역
 

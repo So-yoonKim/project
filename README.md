@@ -127,7 +127,7 @@
 
 ## 🤖 AI 에이전트
 
-`api/agent.js` — AI가 질문을 보고 필요한 도구를 스스로 골라 호출하는 반복 루프(최대 5회)입니다. Claude(`claude-sonnet-5-5`)가 도구를 고르고 답합니다.
+`api/agent.js` — AI가 질문을 보고 필요한 도구를 스스로 골라 호출하는 반복 루프(최대 5회)입니다. Claude가 도구를 고르고 답합니다. 모델은 `server/model.js` 한 곳에서 고르고(환경변수 `CLAUDE_MODEL`), 평소에는 `claude-haiku-5-5`, 시연 영상과 발표 때는 `claude-sonnet-5-5` 를 씁니다.
 
 | 도구 | 하는 일 | 연결된 API |
 |---|---|---|
@@ -190,6 +190,7 @@ server/              공공데이터·AI 호출 함수 (api/ 와 에이전트가
   translate.js         장소 이름·주소 AI 번역 (한 번 번역한 건 저장)
   visitjeju.js         VISIT JEJU 콘텐츠 + 음식점콘텐츠
   oreum.js · weather.js · heritage.js · places.js
+  model.js             사용할 Claude 모델 선택 (haiku ↔ sonnet)
   practice.js          AI 키가 없을 때의 연습 모드 답변
 src/
   main.jsx · router.jsx
@@ -222,6 +223,7 @@ npm run dev                     # http://localhost:5173  (화면 + /api 함께 �
 |---|---|
 | `DATA_GO_KR_KEY` | 공공데이터포털 **Decoding** 키 (서버 전용) |
 | `ANTHROPIC_API_KEY` | Claude API 키 (서버 전용). AI 가이드와 이름·주소 번역에 쓰입니다 |
+| `CLAUDE_MODEL` | (선택) 사용할 Claude 모델. 비우면 `claude-haiku-5-5`, 시연·발표 때는 `claude-sonnet-5-5` 로 바꾸고 Redeploy |
 | `VITE_SUPABASE_URL` | Supabase Project URL (`https://xxxx.supabase.co`) |
 | `VITE_SUPABASE_ANON_KEY` | Supabase anon(publishable) 키 |
 

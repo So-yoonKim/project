@@ -3,9 +3,10 @@ import { searchPlaces } from '../server/places.js';
 import { getWeather } from '../server/weather.js';
 import { searchHeritage } from '../server/heritage.js';
 import { practiceAnswer } from '../server/practice.js';
+import { CLAUDE_MODEL } from '../server/model.js';
 
 const client = new Anthropic({ apiKey: process.env.ANTHROPIC_API_KEY });
-const MODEL = 'claude-sonnet-5-5';
+const MODEL = CLAUDE_MODEL; // 모델은 server/model.js 에서 고른다
 
 // ① 도구 설명서: Claude는 이 설명만 보고 "어떤 도구를 언제 쓸지" 결정한다
 const tools = [
