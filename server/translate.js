@@ -4,7 +4,6 @@ import Anthropic from '@anthropic-ai/sdk'
 
 const LANG_NAME = { en: 'English', zh: 'Simplified Chinese (简体中文)', ja: 'Japanese (日本語)', ru: 'Russian (Русский)' }
 const CLAUDE_MODEL = 'claude-sonnet-5-5' // 고유명사 표기가 더 정확하다. 한 번 번역한 결과는 저장해 두고 다시 쓴다
-const GEMINI_MODEL = process.env.GEMINI_MODEL || 'gemini-2.5-flash'
 
 const cache = new Map() // "언어|원문" → 번역
 
@@ -41,22 +40,6 @@ function parseArray(text, n) {
   return arr.map(String)
 }
 
-async function viaGemini(lang, texts) {
-  const r = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/${GEMINI_MODEL}:generateContent`, {
-    method: 'POST',
-    headers: { 'Content-Type': 'application/json', 'x-goog-api-key': process.env.GEMINI_API_KEY },
-    body: JSON.stringify({
-      systemInstruction: { parts: [{ text: systemPrompt(lang) }] },
-      contents: [{ role: 'user', parts: [{ text: JSON.stringify(texts) }] }],
-      generationConfig: { maxOutputTokens: 4096, temperature: 0 },
-    }),
-  })
-  const data = await r.json().catch(() => ({}))
-  if (!r.ok) { const e = new Error(data.error?.message ?? `Gemini ${r.status}`); e.status = r.status; throw e }
-  const parts = data.candidates?.[0]?.content?.parts ?? []
-  return parseArray(parts.filter((p) => p.text && !p.thought).map((p) => p.text).join(''), texts.length)
-}
-
 async function viaClaude(lang, texts) {
   const client = new Anthropic({ apiKey: process.env.ANTHROPIC_API_KEY })
   const r = await client.messages.create({
@@ -72,10 +55,10 @@ export async function translateTexts(lang, texts) {
   if (!LANG_NAME[lang]) throw Object.assign(new Error('지원하지 않는 언어예요'), { status: 400 })
   const need = [...new Set(texts.filter((t) => !cache.has(`${lang}|${t}`)))]
   if (need.length) {
-    if (!process.env.GEMINI_API_KEY && !process.env.ANTHROPIC_API_KEY) {
+    if (!process.env.ANTHROPIC_API_KEY) {
       throw Object.assign(new Error('AI 키가 없어 번역할 수 없어요'), { status: 503 })
     }
-    const out = process.env.GEMINI_API_KEY ? await viaGemini(lang, need) : await viaClaude(lang, need)
+    const out = await viaClaude(lang, need)
     need.forEach((t, i) => cache.set(`${lang}|${t}`, out[i]))
   }
   return texts.map((t) => cache.get(`${lang}|${t}`) ?? t)

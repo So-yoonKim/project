@@ -107,7 +107,7 @@
 
 ## 🤖 AI 에이전트
 
-`api/agent.js` — AI가 질문을 보고 필요한 도구를 스스로 골라 호출하는 반복 루프(최대 5회)입니다. 기본은 Claude(`claude-sonnet-5-5`)이고, `GEMINI_API_KEY` 가 있으면 Gemini 를 먼저 씁니다.
+`api/agent.js` — AI가 질문을 보고 필요한 도구를 스스로 골라 호출하는 반복 루프(최대 5회)입니다. Claude(`claude-sonnet-5-5`)가 도구를 고르고 답합니다.
 
 | 도구 | 하는 일 | 연결된 API |
 |---|---|---|
@@ -118,7 +118,8 @@
 - **시스템 지시**: 설문대할망 말투, 도구 결과에 없는 장소는 지어내지 않기, 비 오면 실내 대안 제안, 5문장 이내, 마크다운 기호 쓰지 않기
 - 화면에서 고른 언어로 답하고, 대화 기록은 최근 10개만 보냅니다
 - 호출한 도구와 건수가 답변 위에 표시됩니다
-- **연습 모드**: AI 키가 하나도 없으면 오류 대신 미리 준비한 할망 말투 답변을 보여주고, 화면에 "연습 모드"라고 표시합니다 (도구 호출 없음)
+- **연습 모드**: AI 키가 없으면 오류 대신 미리 준비한 할망 말투 답변을 보여주고, 화면에 "연습 모드"라고 표시합니다 (도구 호출 없음)
+- 장소 이름·주소 번역(`/api/translate`)도 같은 Claude 키를 씁니다. 키가 없거나 거절되면 번역을 못 하고 한국어 원문이 그대로 보입니다
 
 ### ✅ 테스트 기록 (배포 사이트에서 직접 실행)
 
@@ -153,7 +154,7 @@
 flowchart LR
   B["🌐 브라우저<br/>React · Zustand"] -->|"/api/*"| S["⚙️ 서버 함수<br/>Vercel · api/"]
   S --> P["📡 공공데이터 API"]
-  S --> A["🤖 Claude / Gemini"]
+  S --> A["🤖 Claude"]
   B -->|"anon 키"| D[("🗄 Supabase<br/>trips")]
 ```
 
@@ -169,7 +170,6 @@ server/              공공데이터·AI 호출 함수 (api/ 와 에이전트가
   translate.js         장소 이름·주소 AI 번역 (한 번 번역한 건 저장)
   visitjeju.js         VISIT JEJU 콘텐츠 + 음식점콘텐츠
   oreum.js · weather.js · heritage.js · places.js
-  gemini.js            Gemini 에이전트 루프
   practice.js          AI 키가 없을 때의 연습 모드 답변
 src/
   main.jsx · router.jsx
@@ -201,12 +201,11 @@ npm run dev                     # http://localhost:5173  (화면 + /api 함께 �
 | 이름 | 설명 |
 |---|---|
 | `DATA_GO_KR_KEY` | 공공데이터포털 **Decoding** 키 (서버 전용) |
-| `ANTHROPIC_API_KEY` | Claude API 키 (서버 전용) |
-| `GEMINI_API_KEY` | Google AI Studio 키 (서버 전용). 있으면 Gemini 가 우선 사용되고, 없으면 Claude 를 씁니다 |
+| `ANTHROPIC_API_KEY` | Claude API 키 (서버 전용). AI 가이드와 이름·주소 번역에 쓰입니다 |
 | `VITE_SUPABASE_URL` | Supabase Project URL (`https://xxxx.supabase.co`) |
 | `VITE_SUPABASE_ANON_KEY` | Supabase anon(publishable) 키 |
 
-`VITE_` 로 시작하는 값만 브라우저에 들어갑니다. `.env.local` 은 `.gitignore` 에 들어 있어 GitHub 에 올라가지 않습니다. AI 키가 둘 다 없어도 사이트는 동작하고, 에이전트만 연습 모드로 답합니다.
+`VITE_` 로 시작하는 값만 브라우저에 들어갑니다. `.env.local` 은 `.gitignore` 에 들어 있어 GitHub 에 올라가지 않습니다. AI 키가 없어도 사이트는 동작하고, 에이전트는 연습 모드로 답하며 장소 이름·주소는 한국어로 보입니다. 환경변수를 바꾼 뒤에는 Vercel 에서 Redeploy, 내 컴퓨터에서는 `npm run dev` 를 다시 켜야 적용됩니다.
 
 ### Supabase 준비
 
@@ -237,6 +236,6 @@ Supabase Auth 이메일 로그인만큼 강한 방식은 아닙니다. 숫자 4~
 
 ## 🙏 이미지·출처
 
-- 메인 일러스트(할망슈퍼): 제작자가 Google Gemini 로 직접 생성한 AI 이미지
+- 메인 일러스트(할망슈퍼): 제작자가 AI 이미지 생성 도구로 직접 만든 이미지
 - 지도: © [OpenStreetMap](https://www.openstreetmap.org/copyright) contributors (Leaflet 으로 표시, 키·결제 불필요)
 - 데이터: 제주특별자치도, 제주관광공사 VISIT JEJU, 기상청, 국가유산청 (공공데이터포털)
