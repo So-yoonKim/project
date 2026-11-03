@@ -6,6 +6,17 @@ import { useAppStore } from '../store/useAppStore'
 import { useT } from '../i18n/useT'
 import { useTranslate } from '../i18n/useTranslate'
 
+// 할망의 당부 문구는 cart.tip.1 ~ cart.tip.10 (messages.js). 문구를 늘리면 TIP_COUNT 도 같이 늘린다
+const TIP_COUNT = 10
+function pickTips(count = 2) {
+  const all = Array.from({ length: TIP_COUNT }, (_, i) => i + 1)
+  for (let i = all.length - 1; i > 0; i--) { // 섞은 뒤 앞에서 count 개
+    const j = Math.floor(Math.random() * (i + 1));
+    [all[i], all[j]] = [all[j], all[i]]
+  }
+  return all.slice(0, count)
+}
+
 // 장바구니: 담은 나들이 전체 목록, - 버튼으로 삭제 / 닉네임을 입력하면 Supabase 에 저장
 export default function CartDrawer() {
   const t = useT()
@@ -26,6 +37,7 @@ export default function CartDrawer() {
   const [draft, setDraft] = useState(nickname)
   const [pin, setPin] = useState('')
   const [msg, setMsg] = useState('') // 들어가기 결과 안내 (비밀번호 틀림 등)
+  const [tips, setTips] = useState(pickTips) // 할망의 당부: 서랍을 열 때마다 다른 문구 2개
 
   async function onSubmit(e) {
     e.preventDefault()
@@ -58,7 +70,7 @@ export default function CartDrawer() {
   }
 
   return (
-    <Offcanvas show={open} onHide={() => setOpen(false)} onExited={onClosed} placement="end" className="cart-drawer">
+    <Offcanvas show={open} onShow={() => setTips(pickTips())} onHide={() => setOpen(false)} onExited={onClosed} placement="end" className="cart-drawer">
       <Offcanvas.Header closeButton>
         <Offcanvas.Title className="svg-title"><i className="bi bi-basket3-fill me-2" />{t('cart.title')} ({cart.length})</Offcanvas.Title>
       </Offcanvas.Header>
@@ -120,8 +132,7 @@ export default function CartDrawer() {
               <span className="postit-pin" />
               <h3 className="postit-title">{t('cart.note.title')}</h3>
               <p>{t('cart.note.l1')}</p>
-              <p>{t('cart.note.l2')}</p>
-              <p className="mb-0">{t('cart.note.l3')}</p>
+              {tips.map((n, i) => <p key={n} className={i === tips.length - 1 ? 'mb-0' : ''}>{t(`cart.tip.${n}`)}</p>)}
             </aside>
           </>
         )}
