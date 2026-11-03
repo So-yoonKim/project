@@ -15,10 +15,27 @@ export default function CartDrawer() {
   const remove = useAppStore((s) => s.removeFromCart)
   const clear = useAppStore((s) => s.clearCart)
   const nickname = useAppStore((s) => s.nickname)
-  const setNickname = useAppStore((s) => s.setNickname)
+  const signedIn = useAppStore((s) => Boolean(s.token))
+  const signIn = useAppStore((s) => s.signIn)
+  const signOut = useAppStore((s) => s.signOut)
+  const authBusy = useAppStore((s) => s.authBusy)
+  const authNotice = useAppStore((s) => s.authNotice)
+  const toast = useAppStore((s) => s.toast)
   const synced = useAppStore((s) => s.cartSynced)
   const tt = useTranslate(cart.flatMap((c) => [c.title, c.addr]))
   const [draft, setDraft] = useState(nickname)
+  const [pin, setPin] = useState('')
+  const [msg, setMsg] = useState('') // 들어가기 결과 안내 (비밀번호 틀림 등)
+
+  async function onSubmit(e) {
+    e.preventDefault()
+    setMsg('')
+    const r = await signIn(draft, pin)
+    if (r.status === 'created') toast(t('cart.auth.created', { nick: r.nickname }))
+    else if (r.status === 'ok') toast(t('cart.auth.welcome', { nick: r.nickname }))
+    else if (r.status !== 'local') setMsg(t(`cart.auth.${r.status}`)) // wrong · locked · invalid · error
+    if (r.status === 'created' || r.status === 'ok') setPin('')
+  }
   const navigate = useNavigate()
 
   // 서랍을 닫고 홈의 "내 코스 지도"로 이동 (서랍이 완전히 닫힌 뒤에 스크롤해야 바로 움직인다)
@@ -46,19 +63,31 @@ export default function CartDrawer() {
         <Offcanvas.Title className="svg-title"><i className="bi bi-basket3-fill me-2" />{t('cart.title')} ({cart.length})</Offcanvas.Title>
       </Offcanvas.Header>
       <Offcanvas.Body>
-        <Form className="mb-3" onSubmit={(e) => { e.preventDefault(); setNickname(draft) }}>
-          <InputGroup size="sm">
-            <Form.Control value={draft} onChange={(e) => setDraft(e.target.value)} placeholder={t('cart.nick.placeholder')} maxLength={20} />
-            <Button type="submit" className="cart-btn rounded-0">{t('cart.nick.save')}</Button>
-          </InputGroup>
-          <Form.Text className="nick-hint">
-            {!isSupabaseReady
-              ? t('cart.hint.local')
-              : synced
-                ? t('cart.hint.synced', { nick: nickname })
-                : t('cart.hint.need')}
-          </Form.Text>
-        </Form>
+        <div className="mb-3">
+          {!isSupabaseReady && <Form.Text className="nick-hint">{t('cart.hint.local')}</Form.Text>}
+
+          {isSupabaseReady && !signedIn && (
+            <Form onSubmit={onSubmit}>
+              <Form.Control size="sm" className="mb-2" value={draft} onChange={(e) => setDraft(e.target.value)}
+                placeholder={t('cart.nick.placeholder')} maxLength={20} autoComplete="username" />
+              <InputGroup size="sm">
+                <Form.Control type="password" inputMode="numeric" autoComplete="current-password" maxLength={6}
+                  value={pin} onChange={(e) => setPin(e.target.value.replace(/\D/g, ''))} placeholder={t('cart.pin.placeholder')} />
+                <Button type="submit" className="cart-btn rounded-0" disabled={authBusy}>{t('cart.nick.save')}</Button>
+              </InputGroup>
+              <Form.Text className="nick-hint">{t('cart.hint.need')}</Form.Text>
+            </Form>
+          )}
+
+          {isSupabaseReady && signedIn && (
+            <div className="d-flex align-items-center justify-content-between gap-2">
+              <Form.Text className="nick-hint m-0">{synced ? t('cart.hint.synced', { nick: nickname }) : `☁ ${nickname}`}</Form.Text>
+              <Button variant="outline-dark" size="sm" className="flex-shrink-0" onClick={signOut}>{t('cart.auth.out')}</Button>
+            </div>
+          )}
+
+          {(msg || authNotice === 'expired') && <div className="nick-error">{msg || t('cart.auth.expired')}</div>}
+        </div>
 
         {cart.length === 0 ? (
           <div className="text-center py-5 cart-empty">

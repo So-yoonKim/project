@@ -15,7 +15,8 @@ create table if not exists trips (
 
 alter table trips enable row level security;
 
--- ※ 실습용 정책(누구나 읽기·쓰기·삭제). 실제 서비스에서는 Supabase Auth 로그인 사용자만 쓰게 바꿉니다.
+-- ※ 실습용 정책(누구나 읽기·쓰기·삭제). 이 파일만 실행하면 닉네임이 곧 열쇠라서 남의 장바구니도 볼 수 있습니다.
+--   이어서 supabase/nickname-pin.sql 을 실행하면 이 정책을 지우고, 닉네임 + 숫자 비밀번호로 보호합니다.
 create policy "trips read all"   on trips for select using (true);
 create policy "trips insert all" on trips for insert with check (true);
 create policy "trips delete all" on trips for delete using (true);

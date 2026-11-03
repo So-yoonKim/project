@@ -10,9 +10,12 @@ export default function Check() {
   const [api, setApi] = useState({ state: 'wait', msg: '확인 중...' })
 
   useEffect(() => {
-    // trips 테이블(supabase/schema.sql)이 없다면 에러 메시지가 그대로 보입니다.
-    if (isSupabaseReady) supabase.from('trips').select('id').limit(1).then(({ error }) =>
-      setDb(error ? { state: 'fail', msg: error.message } : { state: 'ok', msg: '연결 OK' }))
+    // 열쇠 없이 trips_list 를 불러 보면 'bad_token' 오류가 정상입니다 (함수가 있고 연결됐다는 뜻).
+    // 함수가 없다면 supabase/nickname-pin.sql 을 아직 실행하지 않은 것입니다.
+    if (isSupabaseReady) supabase.rpc('trips_list', { p_token: '00000000-0000-0000-0000-000000000000' }).then(({ error }) =>
+      setDb(error && error.message.includes('bad_token')
+        ? { state: 'ok', msg: '연결 OK · 닉네임 비밀번호 보호 적용됨' }
+        : { state: 'fail', msg: error ? `${error.message} — supabase/nickname-pin.sql 을 실행했는지 확인` : '예상과 다른 응답' }))
     ping()
       .then((d) => setApi({ state: 'ok', msg: `OK · 공공데이터 키 ${d.hasDataKey ? '있음' : '없음'} · Claude 키 ${d.hasClaudeKey ? '있음' : '없음'}` }))
       .catch(() => setApi({ state: 'fail', msg: 'npm run dev 가 아니라 vercel dev 로 실행했는지 확인' }))

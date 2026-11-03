@@ -41,14 +41,46 @@ export const useAppStore = create(
         }
       },
 
-      // ③ 닉네임 — 이 이름으로 Supabase trips 테이블에 장바구니를 저장합니다
+      // ③ 닉네임 + 숫자 비밀번호 — 닉네임은 하나뿐이고 비밀번호를 아는 사람만 그 장바구니를 쓴다.
+      //    비밀번호는 서버(DB 함수 nick_enter)가 확인하고, 이 브라우저에는 로그인 성공 때 받은 임시 열쇠(token)만 남긴다.
+      //    (supabase/nickname-pin.sql 을 실행해야 동작합니다)
       nickname: '',
-      setNickname: async (nickname) => {
-        set({ nickname: nickname.trim() })
-        await get().loadCart()
+      token: '',
+      authBusy: false,
+      authNotice: '', // 'expired' = 열쇠가 만료돼 나가진 경우 (화면이 안내문을 보여준다)
+      signIn: async (nickname, pin) => {
+        const nick = nickname.trim()
+        if (!supabase) return { status: 'local' }
+        if (!nick || nick.length > 20 || !/^\d{4,6}$/.test(pin)) return { status: 'invalid' }
+        set({ authBusy: true })
+        try {
+          const { data, error } = await supabase.rpc('nick_enter', { p_nick: nick, p_pin: pin })
+          if (error) return { status: 'error', message: error.message }
+          if (data.status === 'created' || data.status === 'ok') {
+            const local = get().cart // 들어오기 전에 담아 둔 항목은 이 닉네임으로 옮긴다
+            set({ nickname: data.nickname, token: data.token, authNotice: '' })
+            for (const item of local) {
+              await supabase.rpc('trips_add', {
+                p_token: data.token, p_key: item.key, p_cat: item.cat, p_title: item.title,
+                p_addr: item.addr ?? '', p_lat: String(item.lat ?? ''), p_lng: String(item.lng ?? ''),
+              })
+            }
+            await get().loadCart()
+          }
+          return data
+        } finally {
+          set({ authBusy: false })
+        }
       },
+      signOut: async () => {
+        const { token } = get()
+        set({ nickname: '', token: '', cart: [], cartSynced: false, authNotice: '' }) // 같은 기기를 쓰는 다음 사람에게 보이지 않게 비운다
+        if (supabase && token) supabase.rpc('nick_leave', { p_token: token }).then(() => {}, () => {})
+      },
+      // 열쇠가 만료됐거나 없어진 경우: 조용히 나가고 안내문만 남긴다
+      expireSession: () => set({ nickname: '', token: '', cart: [], cartSynced: false, authNotice: 'expired' }),
 
-      // ④ 장바구니(나들이 리스트) — 닉네임이 있으면 Supabase 와 동기화, 없으면 이 브라우저에만 저장
+      // ④ 장바구니(나들이 리스트) — 들어와 있으면 Supabase 와 동기화, 아니면 이 브라우저에만 저장
       cart: [], // { key, title, addr, lat, lng, cat, icon }
       stage: 'intro', // 홈 화면 단계: intro(첫 화면) → shop(카드 진열대). 저장하지 않는다
       setStage: (stage) => set({ stage }),
@@ -56,11 +88,14 @@ export const useAppStore = create(
       setCartOpen: (cartOpen) => set({ cartOpen }),
       cartSynced: false, // 마지막 저장·불러오기가 Supabase 에 성공했는지
       loadCart: async () => {
-        const { nickname, toast } = get()
-        if (!supabase || !nickname) return set({ cartSynced: false })
-        const { data, error } = await supabase
-          .from('trips').select('*').eq('nickname', nickname).order('created_at')
-        if (error) { set({ cartSynced: false }); return toast(`불러오기 실패: ${error.message}`, 'danger') }
+        const { token, toast } = get()
+        if (!supabase || !token) return set({ cartSynced: false })
+        const { data, error } = await supabase.rpc('trips_list', { p_token: token })
+        if (error) {
+          set({ cartSynced: false })
+          if (error.message.includes('bad_token')) return get().expireSession()
+          return toast(`불러오기 실패: ${error.message}`, 'danger')
+        }
         set({
           cartSynced: true,
           cart: data.map((r) => ({ key: r.item_key, title: r.title, addr: r.addr, lat: r.lat, lng: r.lng, cat: r.cat, icon: ICON[r.cat] })),
@@ -69,31 +104,41 @@ export const useAppStore = create(
       addToCart: async (item) => {
         if (get().cart.some((c) => c.key === item.key)) return
         set({ cart: [...get().cart, item] })
-        const { nickname, toast } = get()
-        if (!supabase || !nickname) return
-        const { error } = await supabase.from('trips').insert({
-          nickname, item_key: item.key, cat: item.cat, title: item.title, addr: item.addr, lat: item.lat, lng: item.lng,
+        const { token, toast } = get()
+        if (!supabase || !token) return
+        const { error } = await supabase.rpc('trips_add', {
+          p_token: token, p_key: item.key, p_cat: item.cat, p_title: item.title,
+          p_addr: item.addr ?? '', p_lat: String(item.lat ?? ''), p_lng: String(item.lng ?? ''),
         })
-        if (error && error.code !== '23505') { // 23505 = 이미 담김
+        if (error) {
           set({ cart: get().cart.filter((c) => c.key !== item.key) })
+          if (error.message.includes('bad_token')) return get().expireSession()
           toast(`저장 실패: ${error.message}`, 'danger')
         }
       },
       removeFromCart: async (key) => {
         const before = get().cart
         set({ cart: before.filter((c) => c.key !== key) })
-        const { nickname, toast } = get()
-        if (!supabase || !nickname) return
-        const { error } = await supabase.from('trips').delete().eq('nickname', nickname).eq('item_key', key)
-        if (error) { set({ cart: before }); toast(`삭제 실패: ${error.message}`, 'danger') }
+        const { token, toast } = get()
+        if (!supabase || !token) return
+        const { error } = await supabase.rpc('trips_remove', { p_token: token, p_key: key })
+        if (error) {
+          set({ cart: before })
+          if (error.message.includes('bad_token')) return get().expireSession()
+          toast(`삭제 실패: ${error.message}`, 'danger')
+        }
       },
       clearCart: async () => {
         const before = get().cart
         set({ cart: [] })
-        const { nickname, toast } = get()
-        if (!supabase || !nickname) return
-        const { error } = await supabase.from('trips').delete().eq('nickname', nickname)
-        if (error) { set({ cart: before }); toast(`삭제 실패: ${error.message}`, 'danger') }
+        const { token, toast } = get()
+        if (!supabase || !token) return
+        const { error } = await supabase.rpc('trips_clear', { p_token: token })
+        if (error) {
+          set({ cart: before })
+          if (error.message.includes('bad_token')) return get().expireSession()
+          toast(`삭제 실패: ${error.message}`, 'danger')
+        }
       },
 
       // ⑤ 에이전트 대화
@@ -114,7 +159,7 @@ export const useAppStore = create(
     }),
     {
       name: 'seolmundae-store',
-      partialize: (s) => ({ nickname: s.nickname, cart: s.cart, lang: s.lang, tr: s.tr }),
+      partialize: (s) => ({ nickname: s.nickname, token: s.token, cart: s.cart, lang: s.lang, tr: s.tr }),
     },
   ),
 )
