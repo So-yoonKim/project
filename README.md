@@ -53,6 +53,16 @@
 </tr>
 </table>
 
+**5개 언어로 본 장바구니** — 장소 이름·주소가 고른 언어로 번역되고, 한국어 원문이 이름 아래에 작게 함께 보여요. 화면 문구와 `할망의 당부`도 같은 언어로 바뀝니다.
+
+<table>
+<tr>
+<td align="center"><img src="docs/cart-zh.png" alt="중국어로 본 장바구니" width="230"><br><sub>中文</sub></td>
+<td align="center"><img src="docs/cart-en.png" alt="영어로 본 장바구니" width="230"><br><sub>English</sub></td>
+<td align="center"><img src="docs/cart-ru.png" alt="러시아어로 본 장바구니" width="230"><br><sub>Русский</sub></td>
+</tr>
+</table>
+
 **사용 흐름**: 간판 버튼 `제주나들이 골라봅서!` → 카드 6장 → 목록에서 `+` 로 담기 → 장바구니 → 코스 지도
 
 ## ✨ 주요 기능
