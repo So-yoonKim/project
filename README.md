@@ -63,6 +63,16 @@
 </tr>
 </table>
 
+**할망의 당부 — 서랍을 열 때마다 달라져요** — 첫 줄(신화 한 문장)은 그대로이고, 아래 두 줄은 10가지 당부 중에서 무작위로 나옵니다.
+
+<table>
+<tr>
+<td align="center"><img src="docs/tips-1.png" alt="할망의 당부 예시 1" width="260"></td>
+<td align="center"><img src="docs/tips-2.png" alt="할망의 당부 예시 2" width="260"></td>
+<td align="center"><img src="docs/tips-3.png" alt="할망의 당부 예시 3" width="260"></td>
+</tr>
+</table>
+
 **사용 흐름**: 간판 버튼 `제주나들이 골라봅서!` → 카드 6장 → 목록에서 `+` 로 담기 → 장바구니 → 코스 지도
 
 ## ✨ 주요 기능
